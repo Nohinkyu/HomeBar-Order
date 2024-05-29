@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HomeBar Order</string>
+    <string name="google_sign_in_button">Google 계정으로 로그인</string>
 </resources>
