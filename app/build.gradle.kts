@@ -3,6 +3,8 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+
+    kotlin("plugin.serialization") version "1.8.10"
 }
 
 android {
@@ -25,6 +27,8 @@ android {
             useSupportLibrary = true
         }
         buildConfigField("String", "GOOGLE_CLIENT_ID", localProperties.getProperty("google_client_id"))
+        buildConfigField("String", "SUPABASE_PROJECT_URL", localProperties.getProperty("supabase_project_url"))
+        buildConfigField("String", "SUPABASE_PROJECT_API_KEY", localProperties.getProperty("supabase_project_api_key"))
     }
 
     buildTypes {
@@ -81,4 +85,10 @@ dependencies {
     implementation ("com.google.android.libraries.identity.googleid:googleid:1.1.0")
     implementation ("androidx.credentials:credentials-play-services-auth:1.2.2")
     implementation ("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+
+    // Supabase
+    implementation(platform("io.github.jan-tennert.supabase:bom:2.1.3"))
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")
+    implementation("io.github.jan-tennert.supabase:gotrue-kt")
+    implementation("io.ktor:ktor-client-android:2.3.11")
 }
