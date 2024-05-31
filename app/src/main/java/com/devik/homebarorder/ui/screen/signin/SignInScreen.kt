@@ -1,6 +1,5 @@
-package com.devik.homebarorder
+package com.devik.homebarorder.ui.screen.signin
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -23,16 +22,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
-import com.devik.homebarorder.ui.theme.HomeBarOrderTheme
+import com.devik.homebarorder.BuildConfig
+import com.devik.homebarorder.R
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.gotrue.Auth
+import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.gotrue.providers.Google
+import io.github.jan.supabase.gotrue.providers.builtin.IDToken
+import io.github.jan.supabase.postgrest.Postgrest
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import java.util.UUID
@@ -53,7 +58,7 @@ fun SignInScreen() {
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.size(24.dp))
+            Spacer(modifier = Modifier.size(40.dp))
             GoogleSignInButton()
         }
     }
@@ -63,6 +68,19 @@ fun SignInScreen() {
 fun GoogleSignInButton() {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val supabase = createSupabaseClient(
+        supabaseUrl = BuildConfig.SUPABASE_PROJECT_URL,
+        supabaseKey = BuildConfig.SUPABASE_PROJECT_API_KEY
+    ) {
+        install(Auth)
+        install(Postgrest)
+    }
+
+    val errorMessage = object {
+        val SIGN_IN_CANCEL = "activity is cancelled by the user."
+        val TO_MANY_CANCEL_SIGN_IN =
+            "During begin sign in, failure response from one tap: 16: [28436] Caller has been temporarily blocked due to too many canceled sign-in prompts."
+    }
 
     val onClick: () -> Unit = {
         val credentialManger = CredentialManager.create(context)
@@ -92,11 +110,47 @@ fun GoogleSignInButton() {
                 val credential = result.credential
                 val googleIdTokenCredential = GoogleIdTokenCredential
                     .createFrom(credential.data)
-                Toast.makeText(context, "Sign In", Toast.LENGTH_SHORT).show()
+
+                val googleIdToken = googleIdTokenCredential.idToken
+
+                supabase.auth.signInWith(IDToken) {
+                    idToken = googleIdToken
+                    provider = Google
+                    nonce = rawNonce
+                }
+
+
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.message_sign_in_success),
+                    Toast.LENGTH_SHORT
+                ).show()
             } catch (e: GetCredentialException) {
-                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                if (e.message == errorMessage.SIGN_IN_CANCEL) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.message_sign_in_cancel),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (e.message == errorMessage.TO_MANY_CANCEL_SIGN_IN) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.message_to_many_sign_in_cancel),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.message_sign_fail),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             } catch (e: GoogleIdTokenParsingException) {
-                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.message_sign_fail),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -122,14 +176,5 @@ fun GoogleSignInButton() {
                 fontSize = 16.sp
             )
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    HomeBarOrderTheme {
-        SignInScreen()
     }
 }
