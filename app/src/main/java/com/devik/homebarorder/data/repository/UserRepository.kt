@@ -1,8 +1,9 @@
 package com.devik.homebarorder.data.repository
 
 import com.devik.homebarorder.data.source.local.UserDataSource
+import javax.inject.Inject
 
-class UserRepository (private val userDataSource: UserDataSource) {
+class UserRepository @Inject constructor(private val userDataSource: UserDataSource) {
 
     fun saveUserMailAddress(mailAddress: String) {
         userDataSource.saveUserMail(mailAddress)

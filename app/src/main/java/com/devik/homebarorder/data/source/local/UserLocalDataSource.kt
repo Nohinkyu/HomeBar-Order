@@ -2,8 +2,10 @@ package com.devik.homebarorder.data.source.local
 
 import com.devik.homebarorder.util.Constants.KEY_MAIL_ADDRESS
 import com.devik.homebarorder.util.Constants.KEY_PROFILE_IMAGE
+import javax.inject.Inject
 
-class UserLocalDataSource(private val preferenceManager: PreferenceManager) : UserDataSource {
+class UserLocalDataSource @Inject constructor(private val preferenceManager: PreferenceManager) :
+    UserDataSource {
 
     override fun saveUserMail(mailAddress: String) {
         preferenceManager.putString(KEY_MAIL_ADDRESS, mailAddress)

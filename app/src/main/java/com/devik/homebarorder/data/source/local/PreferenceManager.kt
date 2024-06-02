@@ -2,8 +2,9 @@ package com.devik.homebarorder.data.source.local
 
 import android.content.Context
 import com.devik.homebarorder.util.Constants.PREFERENCE_NAME
+import dagger.hilt.android.qualifiers.ApplicationContext
 
-class PreferenceManager(context: Context) {
+class PreferenceManager constructor(@ApplicationContext context: Context) {
 
     private val sharedPreference =
         context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)

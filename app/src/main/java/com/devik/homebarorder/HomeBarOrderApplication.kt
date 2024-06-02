@@ -1,16 +1,8 @@
 package com.devik.homebarorder
 
 import android.app.Application
-import com.devik.homebarorder.data.source.local.PreferenceManager
+import dagger.hilt.android.HiltAndroidApp
 
-class HomeBarOrderApplication : Application() {
+@HiltAndroidApp
+class HomeBarOrderApplication : Application()
 
-    companion object {
-        lateinit var prefsManager: PreferenceManager
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        prefsManager = PreferenceManager(this)
-    }
-}
