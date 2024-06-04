@@ -27,8 +27,11 @@ import androidx.compose.ui.unit.sp
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.devik.homebarorder.BuildConfig
 import com.devik.homebarorder.R
+import com.devik.homebarorder.ui.component.navigation.NavigationRoute
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
@@ -43,7 +46,7 @@ import java.security.MessageDigest
 import java.util.UUID
 
 @Composable
-fun SignInScreen() {
+fun SignInScreen(navController: NavController) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -59,13 +62,15 @@ fun SignInScreen() {
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.size(40.dp))
-            GoogleSignInButton()
+            GoogleSignInButton(navController)
         }
     }
 }
 
 @Composable
-fun GoogleSignInButton() {
+fun GoogleSignInButton(navController: NavController) {
+
+    val viewModel: SignInViewModel = hiltViewModel()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val supabase = createSupabaseClient(
@@ -119,6 +124,16 @@ fun GoogleSignInButton() {
                     nonce = rawNonce
                 }
 
+                val supabaseAuth = supabase.auth.currentUserOrNull()
+                val userMetaData = supabaseAuth?.userMetadata
+                val userImage = userMetaData?.get("avatar_url")
+
+                viewModel.saveUserImageUrl(userImage.toString())
+                viewModel.saveUserMailAddress(supabaseAuth?.email.toString())
+
+                navController.navigate(NavigationRoute.MENU_SCREEN) {
+                    popUpTo(NavigationRoute.SIGN_IN_SCREEN) { inclusive = true }
+                }
 
                 Toast.makeText(
                     context,

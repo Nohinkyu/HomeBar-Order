@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.devik.homebarorder.ui.screen.signin.SignInScreen
+import com.devik.homebarorder.ui.component.navigation.ScreenNavigation
 import com.devik.homebarorder.ui.theme.HomeBarOrderTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SignInScreen()
+                    ScreenNavigation()
                 }
             }
         }
