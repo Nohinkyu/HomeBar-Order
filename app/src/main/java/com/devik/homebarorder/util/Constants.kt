@@ -6,4 +6,6 @@ object Constants {
 
     const val KEY_MAIL_ADDRESS = "mail_address"
     const val KEY_PROFILE_IMAGE = "profile_image"
+
+    const val KEY_FIRST_SIGN_IN = "first_sign_in"
 }

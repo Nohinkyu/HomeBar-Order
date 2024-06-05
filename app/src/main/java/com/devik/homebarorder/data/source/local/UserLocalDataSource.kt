@@ -21,4 +21,12 @@ class UserLocalDataSource @Inject constructor(private val preferenceManager: Pre
     override fun getUserProfileImage(): String {
         return preferenceManager.getString(Constants.KEY_PROFILE_IMAGE, "")
     }
+
+    override fun saveIsFirstSignIn() {
+        preferenceManager.putBoolean(Constants.KEY_FIRST_SIGN_IN, false)
+    }
+
+    override fun getIsFirstSignIn(): Boolean {
+        return preferenceManager.getBoolean(Constants.KEY_FIRST_SIGN_IN, true)
+    }
 }

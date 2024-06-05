@@ -20,4 +20,12 @@ class UserRepository @Inject constructor(private val userDataSource: UserDataSou
     fun getUserImageUrl(): String {
         return userDataSource.getUserProfileImage()
     }
+
+    fun getIsFirstSignIn(): Boolean {
+        return userDataSource.getIsFirstSignIn()
+    }
+
+    fun saveIsFirstSignIn() {
+        userDataSource.saveIsFirstSignIn()
+    }
 }

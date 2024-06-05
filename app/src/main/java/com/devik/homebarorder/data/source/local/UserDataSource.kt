@@ -6,4 +6,6 @@ interface UserDataSource {
     fun getUserMail(): String
     fun saveUserProfileImage(imageUrl: String)
     fun getUserProfileImage(): String
+    fun saveIsFirstSignIn()
+    fun getIsFirstSignIn() :Boolean
 }
