@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">HomeBar Order</string>
+    <string name="google_sign_in_button">Google 계정으로 로그인</string>
+    <string name="message_sign_in_cancel">"로그인을 취소되었습니다. 네트워크 상태를 확인해 주세요. 로그인 시도를 여러 번 취소하면 일시적으로 로그인할 수 없을 수 있습니다."</string>
+    <string name="message_to_many_sign_in_cancel">"로그인을 여러 번 취소하여 일시적으로 로그인이 차단되었습니다. 잠시 후 다시 시도해 주세요."</string>
+    <string name="message_sign_fail">"로그인에 실패했습니다. 네트워크 상태를 확인하거나 나중에 다시 시도해 주세요."</string>
+    <string name="message_sign_in_success">HomeBar Order 로그인 성공.</string>
+
+    <string name="dialog_message_manual_title">HomeBar Order에 오신 것을 환영합니다.</string>
+    <string name="dialog_message_manual_text">HomeBar Order를 사용하는 방법에 대해 안내드립니다. 아래의 단계를 따라주세요.</string>
+    <string name="dialog_message_manual_header_1">1.</string>
+    <string name="dialog_message_manual_header_2">2.</string>
+    <string name="dialog_message_manual_header_3">3.</string>
+    <string name="dialog_message_manual_header_4">4.</string>
+    <string name="dialog_message_manual_header_5">5.</string>
+    <string name="dialog_message_manual_header_6">6.</string>
+    <string name="dialog_message_manual_body_1">좌측 상단의 메뉴 아이콘을 클릭해 주세요.</string>
+    <string name="dialog_message_manual_body_2">카테고리 등록,수정 화면으로 이동해서 카테고리를 먼저 등록해 주세요.</string>
+    <string name="dialog_message_manual_body_3">메뉴 등록, 수정 화면으로 이동해서 카테고리별 메뉴를 등록해 주세요.</string>
+    <string name="dialog_message_manual_body_4">메뉴판 화면에서 등록한 카테고리와 메뉴들을 확인하고 주문할 수 있습니다.</string>
+    <string name="dialog_message_manual_body_5">주문내역 화면에서 주문 내역을 확인할 수 있습니다.</string>
+    <string name="dialog_message_manual_body_6">다른 기기에 같은 구글 계정으로 로그인해서 주문내역을 실시간으로 받아볼 수 있습니다.</string>
+    <string name="dialog_button_manual_start">HomeBar Order 시작하기</string>
+
+    <string name="content_description_menu">Menu</string>
 </resources>
