@@ -8,7 +8,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import com.devik.homebarorder.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -19,7 +21,10 @@ fun MenuIconWithTitleAppBar(title: String) {
         },
         navigationIcon = {
             IconButton(onClick = { /*TODO*/ }) {
-                Icon(Icons.Default.Menu, contentDescription = "Menu")
+                Icon(
+                    Icons.Default.Menu,
+                    contentDescription = stringResource(id = R.string.content_description_menu)
+                )
             }
         },
     )
