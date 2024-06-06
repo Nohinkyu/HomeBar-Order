@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -25,7 +25,6 @@ fun MenuScreen(navController: NavController) {
     CompositionLocalProvider(
         androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current,
     ) {
-        val context = LocalContext.current
         val viewModel: MenuScreenViewModel = hiltViewModel()
         val manualDialogState by viewModel.manualDialogState.collectAsStateWithLifecycle()
         viewModel.checkIsFirstSignIn()
@@ -37,7 +36,7 @@ fun MenuScreen(navController: NavController) {
         }
 
         Scaffold(
-            topBar = { MenuIconWithTitleAppBar(context.getString(R.string.app_name)) },
+            topBar = { MenuIconWithTitleAppBar(stringResource(id = R.string.app_name)) },
             modifier = Modifier.padding(top = 8.dp)
         ) { paddingValues ->
 
