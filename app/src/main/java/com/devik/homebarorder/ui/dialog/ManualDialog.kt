@@ -108,7 +108,7 @@ fun ManualDialog(onDismissRequest: () -> Unit) {
 }
 
 @Composable
-fun HeadRowText(head: String, body: String) {
+private fun HeadRowText(head: String, body: String) {
     Row(verticalAlignment = Alignment.Top) {
         Text(text = head, fontSize = 16.sp)
         Spacer(modifier = Modifier.width(4.dp))

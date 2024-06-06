@@ -68,7 +68,7 @@ fun SignInScreen(navController: NavController) {
 }
 
 @Composable
-fun GoogleSignInButton(navController: NavController) {
+private fun GoogleSignInButton(navController: NavController) {
 
     val viewModel: SignInViewModel = hiltViewModel()
     val context = LocalContext.current
