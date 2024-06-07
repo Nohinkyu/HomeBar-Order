@@ -1,7 +1,7 @@
 package com.devik.homebarorder.di
 
 import android.content.Context
-import com.devik.homebarorder.data.source.local.PreferenceManager
+import com.devik.homebarorder.data.source.local.database.PreferenceManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

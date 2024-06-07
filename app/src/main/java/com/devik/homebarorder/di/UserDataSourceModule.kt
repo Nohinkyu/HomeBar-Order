@@ -1,6 +1,6 @@
 package com.devik.homebarorder.di
 
-import com.devik.homebarorder.data.source.local.PreferenceManager
+import com.devik.homebarorder.data.source.local.database.PreferenceManager
 import com.devik.homebarorder.data.source.local.UserDataSource
 import com.devik.homebarorder.data.source.local.UserLocalDataSource
 import dagger.Module
