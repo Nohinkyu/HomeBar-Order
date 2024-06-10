@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,6 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.devik.homebarorder.R
 import com.devik.homebarorder.data.source.local.database.CategoryEntity
 import com.devik.homebarorder.ui.component.topappbar.BackIconWithTitleAppBar
+import com.devik.homebarorder.ui.dialog.YesOrNoDialog
 import com.devik.homebarorder.ui.theme.LightGray
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,6 +59,8 @@ fun ManageCategoryScreen() {
         val viewModel: ManageCategoryViewModel = hiltViewModel()
         val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
         val categoryTextState by viewModel.categoryTextState.collectAsStateWithLifecycle()
+        val deleteDialogState by viewModel.deleteDialogState.collectAsStateWithLifecycle()
+        val deleteTargetCategory by viewModel.deleteTargetCategory.collectAsStateWithLifecycle()
         viewModel.getAllCategoryList()
 
         Scaffold(
@@ -138,10 +142,26 @@ fun ManageCategoryScreen() {
                     items(categoryList) { item ->
                         ItemCategory(
                             categoryEntity = item,
-                            onDeleteClick = { viewModel.deleteCategory(item) })
+                            onDeleteClick = {
+                                viewModel.showDeleteDialog()
+                                viewModel.setDeleteTargetCategory(item)
+                            }
+                        )
                     }
                 }
             }
+        }
+        if (deleteDialogState) {
+            YesOrNoDialog(
+                body = stringResource(R.string.dialog_message_category_delete_body).trimMargin(),
+                yesButtonText = stringResource(R.string.dialog_button_delete),
+                onDismissRequest = { viewModel.closeDeleteDialog() },
+                onYesClickRequest = {
+                    with(viewModel) {
+                        deleteCategory(deleteTargetCategory)
+                        closeDeleteDialog()
+                    }
+                })
         }
     }
 }
@@ -165,9 +185,12 @@ private fun ItemCategory(categoryEntity: CategoryEntity, onDeleteClick: () -> Un
             Text(
                 text = categoryEntity.category,
                 modifier = Modifier
+                    .fillMaxWidth(0.5f)
                     .align(Alignment.CenterStart)
                     .padding(start = 16.dp),
-                fontSize = 24.sp
+                fontSize = 24.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Row(
                 modifier = Modifier

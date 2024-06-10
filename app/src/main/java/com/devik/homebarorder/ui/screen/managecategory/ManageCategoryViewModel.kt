@@ -20,6 +20,12 @@ class ManageCategoryViewModel @Inject constructor(private val categoryRepository
     private val _categoryTextState = MutableStateFlow<String>("")
     val categoryTextState: StateFlow<String> = _categoryTextState
 
+    private val _deleteDialogState = MutableStateFlow<Boolean>(false)
+    val deleteDialogState: MutableStateFlow<Boolean> = _deleteDialogState
+
+    private val _deleteTargetCategory =MutableStateFlow<CategoryEntity>(CategoryEntity(category = ""))
+    val deleteTargetCategory:MutableStateFlow<CategoryEntity> = _deleteTargetCategory
+
     fun getAllCategoryList() {
         viewModelScope.launch {
             _categoryList.value = categoryRepository.getAllCategory()
@@ -43,5 +49,18 @@ class ManageCategoryViewModel @Inject constructor(private val categoryRepository
             categoryRepository.deleteCategory(categoryEntity)
             getAllCategoryList()
         }
+        _deleteTargetCategory.value = CategoryEntity(category = "")
+    }
+
+    fun setDeleteTargetCategory(categoryEntity: CategoryEntity) {
+        _deleteTargetCategory.value = categoryEntity
+    }
+
+    fun showDeleteDialog() {
+        _deleteDialogState.value = true
+    }
+
+    fun closeDeleteDialog() {
+        _deleteDialogState.value = false
     }
 }

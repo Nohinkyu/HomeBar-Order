@@ -22,6 +22,10 @@
     <string name="dialog_message_manual_body_5">주문내역 화면에서 주문 내역을 확인할 수 있습니다.</string>
     <string name="dialog_message_manual_body_6">다른 기기에 같은 구글 계정으로 로그인해서 주문내역을 실시간으로 받아볼 수 있습니다.</string>
     <string name="dialog_button_manual_start">HomeBar Order 시작하기</string>
+    <string name="dialog_message_category_delete_body">"""카테고리를 삭제하시겠습니까?
+                        | 해당 카테고리로 등록한 메뉴가 있는 경우 삭제할 수 없습니다."""</string>
+    <string name="dialog_button_cancel">취소</string>
+    <string name="dialog_button_delete">삭제</string>
 
     <string name="content_description_menu">Menu</string>
     <string name="content_description_add_category">add_category</string>
