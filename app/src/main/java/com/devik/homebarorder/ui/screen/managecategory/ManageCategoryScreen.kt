@@ -45,6 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.devik.homebarorder.R
 import com.devik.homebarorder.data.source.local.database.CategoryEntity
 import com.devik.homebarorder.ui.component.topappbar.BackIconWithTitleAppBar
+import com.devik.homebarorder.ui.dialog.EditCategoryDialog
 import com.devik.homebarorder.ui.dialog.YesOrNoDialog
 import com.devik.homebarorder.ui.theme.LightGray
 
@@ -61,6 +62,9 @@ fun ManageCategoryScreen() {
         val categoryTextState by viewModel.categoryTextState.collectAsStateWithLifecycle()
         val deleteDialogState by viewModel.deleteDialogState.collectAsStateWithLifecycle()
         val deleteTargetCategory by viewModel.deleteTargetCategory.collectAsStateWithLifecycle()
+        val editCategoryDialogState by viewModel.editCategoryDialogState.collectAsStateWithLifecycle()
+        val editTargetCategory by viewModel.editTargetCategory.collectAsStateWithLifecycle()
+        val editTargetCategoryTextState by viewModel.editTargetCategoryTextState.collectAsStateWithLifecycle()
         viewModel.getAllCategoryList()
 
         Scaffold(
@@ -145,6 +149,10 @@ fun ManageCategoryScreen() {
                             onDeleteClick = {
                                 viewModel.showDeleteDialog()
                                 viewModel.setDeleteTargetCategory(item)
+                            },
+                            onEditClick = {
+                                viewModel.setEditTargetCategory(item)
+                                viewModel.showEditCategoryDialog()
                             }
                         )
                     }
@@ -163,11 +171,22 @@ fun ManageCategoryScreen() {
                     }
                 })
         }
+        if (editCategoryDialogState) {
+            EditCategoryDialog(
+                editTextState = editTargetCategoryTextState,
+                onDismissRequest = { viewModel.closeEditCategoryDialog() },
+                onCategoryChange = { viewModel.onEditCategoryTextChange(it) },
+                onSaveRequest = {viewModel.updateCategory(CategoryEntity(editTargetCategory.uid, editTargetCategoryTextState))})
+        }
     }
 }
 
 @Composable
-private fun ItemCategory(categoryEntity: CategoryEntity, onDeleteClick: () -> Unit) {
+private fun ItemCategory(
+    categoryEntity: CategoryEntity,
+    onDeleteClick: () -> Unit,
+    onEditClick: () -> Unit
+) {
     Spacer(modifier = Modifier.size(4.dp))
     Card(
         modifier = Modifier
@@ -198,7 +217,7 @@ private fun ItemCategory(categoryEntity: CategoryEntity, onDeleteClick: () -> Un
                     .align(Alignment.CenterEnd),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { /*TODO*/ }, modifier = Modifier.padding(end = 8.dp)) {
+                IconButton(onClick = onEditClick, modifier = Modifier.padding(end = 8.dp)) {
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = stringResource(R.string.content_description_edit_category)

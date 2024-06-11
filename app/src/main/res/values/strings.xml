@@ -26,6 +26,7 @@
                         | 해당 카테고리로 등록한 메뉴가 있는 경우 삭제할 수 없습니다."""</string>
     <string name="dialog_button_cancel">취소</string>
     <string name="dialog_button_delete">삭제</string>
+    <string name="dialog_button_save">저장</string>
 
     <string name="content_description_menu">Menu</string>
     <string name="content_description_add_category">add_category</string>
