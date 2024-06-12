@@ -1,21 +1,23 @@
 package com.devik.homebarorder.ui.component.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.devik.homebarorder.data.source.local.database.PreferenceManager
 import com.devik.homebarorder.ui.screen.managecategory.ManageCategoryScreen
 import com.devik.homebarorder.ui.screen.menu.MenuScreen
 import com.devik.homebarorder.ui.screen.signin.SignInScreen
-import com.devik.homebarorder.ui.screen.signin.SignInViewModel
+import com.devik.homebarorder.util.Constants
 
 @Composable
 fun ScreenNavigation(navController: NavHostController) {
-    val viewModel: SignInViewModel = hiltViewModel()
-    viewModel.checkUserInfo()
+    val preferenceManager = PreferenceManager(LocalContext.current)
+    val userMail = preferenceManager.getString(Constants.KEY_MAIL_ADDRESS,"")
+    val userImage = preferenceManager.getString(Constants.KEY_PROFILE_IMAGE,"")
 
-    val startDestination: String = if (!viewModel.isSignIn.value) {
+    val startDestination: String = if (userMail.isBlank() && userImage.isBlank()) {
         NavigationRoute.SIGN_IN_SCREEN
     } else {
         NavigationRoute.MENU_SCREEN
