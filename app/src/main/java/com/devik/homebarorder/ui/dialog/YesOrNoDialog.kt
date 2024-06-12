@@ -60,7 +60,12 @@ fun YesOrNoDialog(
             ) {
                 Spacer(modifier = Modifier.heightIn(8.dp))
 
-                Image(painter = painterResource(R.drawable.ic_info), contentDescription = "")
+                Image(
+                    painter = painterResource(R.drawable.ic_info),
+                    contentDescription = stringResource(
+                        R.string.content_description_info_icon
+                    )
+                )
 
                 Spacer(modifier = Modifier.heightIn(8.dp))
 
@@ -84,7 +89,10 @@ fun YesOrNoDialog(
                         shape = RoundedCornerShape(5.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = LightGray),
                     ) {
-                        Text(text = stringResource(R.string.dialog_button_cancel), color = Color.Black)
+                        Text(
+                            text = stringResource(R.string.dialog_button_cancel),
+                            color = Color.Black
+                        )
                     }
                     Button(
                         onClick = onYesClickRequest,

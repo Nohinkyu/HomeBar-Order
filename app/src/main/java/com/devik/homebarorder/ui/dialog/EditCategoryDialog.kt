@@ -63,7 +63,11 @@ fun EditCategoryDialog(
 
                 Spacer(modifier = Modifier.heightIn(24.dp))
 
-                Text(text = "카테고리 수정", fontSize = 12.sp, modifier = Modifier.padding(start = 24.dp))
+                Text(
+                    text = stringResource(R.string.dialog_message_edit_category_text),
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(start = 24.dp)
+                )
 
                 Spacer(modifier = Modifier.heightIn(4.dp))
 
