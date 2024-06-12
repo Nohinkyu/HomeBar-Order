@@ -27,11 +27,12 @@ import androidx.compose.ui.unit.sp
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.devik.homebarorder.BuildConfig
 import com.devik.homebarorder.R
+import com.devik.homebarorder.data.source.local.database.PreferenceManager
 import com.devik.homebarorder.ui.component.navigation.NavigationRoute
+import com.devik.homebarorder.util.Constants
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
@@ -70,9 +71,9 @@ fun SignInScreen(navController: NavController) {
 @Composable
 private fun GoogleSignInButton(navController: NavController) {
 
-    val viewModel: SignInViewModel = hiltViewModel()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val preferenceManager = PreferenceManager(context)
     val supabase = createSupabaseClient(
         supabaseUrl = BuildConfig.SUPABASE_PROJECT_URL,
         supabaseKey = BuildConfig.SUPABASE_PROJECT_API_KEY
@@ -128,8 +129,8 @@ private fun GoogleSignInButton(navController: NavController) {
                 val userMetaData = supabaseAuth?.userMetadata
                 val userImage = userMetaData?.get("avatar_url")
 
-                viewModel.saveUserImageUrl(userImage.toString())
-                viewModel.saveUserMailAddress(supabaseAuth?.email.toString())
+                preferenceManager.putString(Constants.KEY_MAIL_ADDRESS, supabaseAuth?.email.toString())
+                preferenceManager.putString(Constants.KEY_PROFILE_IMAGE, userImage.toString())
 
                 navController.navigate(NavigationRoute.MENU_SCREEN) {
                     popUpTo(NavigationRoute.SIGN_IN_SCREEN) { inclusive = true }
