@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.navigation.compose.rememberNavController
 import com.devik.homebarorder.ui.component.navigation.ScreenNavigation
 import com.devik.homebarorder.ui.theme.HomeBarOrderTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,11 +43,12 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             HomeBarOrderTheme {
+                val navController = rememberNavController()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ScreenNavigation()
+                    ScreenNavigation(navController)
                 }
             }
         }

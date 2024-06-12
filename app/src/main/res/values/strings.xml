@@ -41,4 +41,7 @@
                         |카테고리는 등록한 순서대로 화면에 표시됩니다.
                     |ex) 보드카베이스, 데킬라베이스, 위스키, 와인
                     |ex) Vodka, Gin, Rum, Tequila"""</string>
+
+    <string name="drawer_menu_screen_name_menu">메뉴판</string>
+    <string name="drawer_menu_screen_name_manage_category">카테고리추가, 수정</string>
 </resources>

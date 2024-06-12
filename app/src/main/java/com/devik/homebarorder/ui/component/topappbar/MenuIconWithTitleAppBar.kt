@@ -14,13 +14,13 @@ import com.devik.homebarorder.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuIconWithTitleAppBar(title: String) {
+fun MenuIconWithTitleAppBar(title: String, menuIconOnClick: () -> Unit) {
     CenterAlignedTopAppBar(
         title = {
             Text(text = title, fontSize = 24.sp)
         },
         navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {menuIconOnClick()}) {
                 Icon(
                     Icons.Default.Menu,
                     contentDescription = stringResource(id = R.string.content_description_menu)

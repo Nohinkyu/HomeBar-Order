@@ -12,13 +12,13 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BackIconWithTitleAppBar(title: String) {
+fun BackIconWithTitleAppBar(title: String, onBackButtonClick: () -> Unit) {
     TopAppBar(
         title = {
             Text(text = title, fontSize = 24.sp)
         },
         navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick =  onBackButtonClick ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack, contentDescription = "back_button"
                 )

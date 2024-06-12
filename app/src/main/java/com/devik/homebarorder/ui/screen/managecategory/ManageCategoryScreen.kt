@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.devik.homebarorder.R
 import com.devik.homebarorder.data.source.local.database.CategoryEntity
 import com.devik.homebarorder.ui.component.topappbar.BackIconWithTitleAppBar
@@ -51,7 +52,7 @@ import com.devik.homebarorder.ui.theme.LightGray
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ManageCategoryScreen() {
+fun ManageCategoryScreen(navController: NavController) {
 
     CompositionLocalProvider(
         androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current,
@@ -68,7 +69,12 @@ fun ManageCategoryScreen() {
         viewModel.getAllCategoryList()
 
         Scaffold(
-            topBar = { BackIconWithTitleAppBar(title = stringResource(R.string.top_appbar_title_category)) },
+            topBar = {
+                BackIconWithTitleAppBar(
+                    title = stringResource(R.string.top_appbar_title_category),
+                    onBackButtonClick = {navController.popBackStack()}
+                )
+            },
             modifier = Modifier.padding(8.dp)
         ) { paddingValues ->
             Column(
@@ -176,7 +182,14 @@ fun ManageCategoryScreen() {
                 editTextState = editTargetCategoryTextState,
                 onDismissRequest = { viewModel.closeEditCategoryDialog() },
                 onCategoryChange = { viewModel.onEditCategoryTextChange(it) },
-                onSaveRequest = {viewModel.updateCategory(CategoryEntity(editTargetCategory.uid, editTargetCategoryTextState))})
+                onSaveRequest = {
+                    viewModel.updateCategory(
+                        CategoryEntity(
+                            editTargetCategory.uid,
+                            editTargetCategoryTextState
+                        )
+                    )
+                })
         }
     }
 }
