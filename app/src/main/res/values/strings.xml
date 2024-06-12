@@ -5,6 +5,7 @@
     <string name="message_to_many_sign_in_cancel">"로그인을 여러 번 취소하여 일시적으로 로그인이 차단되었습니다. 잠시 후 다시 시도해 주세요."</string>
     <string name="message_sign_fail">"로그인에 실패했습니다. 네트워크 상태를 확인하거나 나중에 다시 시도해 주세요."</string>
     <string name="message_sign_in_success">HomeBar Order 로그인 성공.</string>
+    <string name="message_is_category_blank">카테고리를 입력해 주세요.</string>
 
     <string name="dialog_message_manual_title">HomeBar Order에 오신 것을 환영합니다.</string>
     <string name="dialog_message_manual_text">HomeBar Order를 사용하는 방법에 대해 안내드립니다. 아래의 단계를 따라주세요.</string>
@@ -21,6 +22,29 @@
     <string name="dialog_message_manual_body_5">주문내역 화면에서 주문 내역을 확인할 수 있습니다.</string>
     <string name="dialog_message_manual_body_6">다른 기기에 같은 구글 계정으로 로그인해서 주문내역을 실시간으로 받아볼 수 있습니다.</string>
     <string name="dialog_button_manual_start">HomeBar Order 시작하기</string>
+    <string name="dialog_message_category_delete_body">"""카테고리를 삭제하시겠습니까?
+                        | 해당 카테고리로 등록한 메뉴가 있는 경우 삭제할 수 없습니다."""</string>
+    <string name="dialog_button_cancel">취소</string>
+    <string name="dialog_button_delete">삭제</string>
+    <string name="dialog_button_save">저장</string>
+    <string name="dialog_message_edit_category_text">카테고리 수정</string>
 
     <string name="content_description_menu">Menu</string>
+    <string name="content_description_add_category">add_category</string>
+    <string name="content_description_edit_category">edit_category</string>
+    <string name="content_description_delete_category">delete_category</string>
+    <string name="content_description_back_button">back_button</string>
+    <string name="content_description_info_icon">info_icon</string>
+
+    <string name="top_appbar_title_category">Category</string>
+
+    <string name="placeholder_add_category">카테고리 등록</string>
+
+    <string name="mange_category_manual">"""카테고리를 등록해 주세요.
+                        |카테고리는 등록한 순서대로 화면에 표시됩니다.
+                    |ex) 보드카베이스, 데킬라베이스, 위스키, 와인
+                    |ex) Vodka, Gin, Rum, Tequila"""</string>
+
+    <string name="drawer_menu_screen_name_menu">메뉴판</string>
+    <string name="drawer_menu_screen_name_manage_category">카테고리추가, 수정</string>
 </resources>

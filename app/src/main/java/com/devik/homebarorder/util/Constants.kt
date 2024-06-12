@@ -8,4 +8,6 @@ object Constants {
     const val KEY_PROFILE_IMAGE = "profile_image"
 
     const val KEY_FIRST_SIGN_IN = "first_sign_in"
+
+    const val CATEGORY_DATABASE_NAME = "category_database"
 }
