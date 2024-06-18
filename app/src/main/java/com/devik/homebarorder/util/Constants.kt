@@ -10,4 +10,5 @@ object Constants {
     const val KEY_FIRST_SIGN_IN = "first_sign_in"
 
     const val CATEGORY_DATABASE_NAME = "category_database"
+    const val MENU_DATABASE_NAME = "menu_database"
 }
