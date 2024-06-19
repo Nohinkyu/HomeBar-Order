@@ -20,4 +20,7 @@ interface MenuDao {
 
     @Update
     suspend fun updateMenu(menuEntity: MenuEntity)
+
+    @Query("SELECT * FROM menu_list WHERE uid = :uid")
+    suspend fun getMenu(uid: Int):MenuEntity
 }

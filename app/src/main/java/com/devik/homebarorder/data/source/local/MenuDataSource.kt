@@ -8,4 +8,5 @@ interface MenuDataSource {
     suspend fun insertMenu(menuEntity: MenuEntity)
     suspend fun deleteMenu(menuEntity: MenuEntity)
     suspend fun updateMenu(menuEntity: MenuEntity)
+    suspend fun getEditTargetMenu(uid: Int): MenuEntity
 }

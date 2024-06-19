@@ -21,4 +21,8 @@ class MenuRepository @Inject constructor(private val menuDatasource: MenuDataSou
     suspend fun updateMenu(menuEntity: MenuEntity) {
         menuDatasource.updateMenu(menuEntity)
     }
+
+    suspend fun getEditTargetMenu(uid: Int): MenuEntity {
+        return menuDatasource.getEditTargetMenu(uid)
+    }
 }

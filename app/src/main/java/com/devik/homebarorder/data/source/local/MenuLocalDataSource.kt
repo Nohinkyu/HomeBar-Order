@@ -23,4 +23,8 @@ class MenuLocalDataSource @Inject constructor(private val menuDatabase: MenuData
     override suspend fun updateMenu(menuEntity: MenuEntity) {
         dao.updateMenu(menuEntity)
     }
+
+    override suspend fun getEditTargetMenu(uid: Int): MenuEntity {
+        return dao.getMenu(uid)
+    }
 }
