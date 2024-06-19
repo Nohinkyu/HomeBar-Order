@@ -113,7 +113,7 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
         Scaffold(
             topBar = {
                 BackIconWithTitleAppBar(title = stringResource(R.string.top_appbar_title_edit_add_menu),
-                    onBackButtonClick = { navController.popBackStack() })
+                    navController = navController)
             },
             modifier = Modifier.padding(top = 8.dp)
         ) { paddingValues ->

@@ -92,7 +92,7 @@ fun ManageMenuScreen(navController: NavController) {
                     BackAndSearchIconAppBar(
                         title = stringResource(R.string.top_appbar_title_menu),
                         searchIconClick = { viewModel.openSearchAppBar() },
-                        backIconClick = { navController.popBackStack() })
+                        backIconClick = { navController.navigateUp() })
                 } else {
                     SearchAppBar(
                         onBackClick = { viewModel.closeSearchAppBar() },
