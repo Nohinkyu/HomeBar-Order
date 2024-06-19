@@ -45,12 +45,12 @@ fun SearchAppBar(
         },
         navigationIcon = {
             IconButton(onClick = onBackClick) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(R.string.content_description_back_button))
             }
         },
         actions = {
             IconButton(onClick =  onSearchClick) {
-                Icon(imageVector = Icons.Default.Search, contentDescription = "")
+                Icon(imageVector = Icons.Default.Search, contentDescription = stringResource(R.string.content_description_search_button))
             }
         }
     )

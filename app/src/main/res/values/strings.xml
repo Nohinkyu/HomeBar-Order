@@ -40,7 +40,8 @@
     <string name="content_description_user_image">user_image</string>
     <string name="content_description_add_menu_button">add_menu_button</string>
     <string name="content_description_menu_image">menu_image</string>
-    <string name="content_description_get_menu_image">_get_menu_image</string>
+    <string name="content_description_get_menu_image">get_menu_image</string>
+    <string name="content_description_search_button">search_button</string>
 
     <string name="drop_down_menu_item_delete">삭제</string>
     <string name="drop_down_menu_item_edit">수정</string>
