@@ -6,6 +6,7 @@
     <string name="message_sign_fail">"로그인에 실패했습니다. 네트워크 상태를 확인하거나 나중에 다시 시도해 주세요."</string>
     <string name="message_sign_in_success">HomeBar Order 로그인 성공.</string>
     <string name="message_is_category_blank">카테고리를 입력해 주세요.</string>
+    <string name="message_is_category_and_menu_name_blank">메뉴명과 카테고리를 입력해 주세요.</string>
 
     <string name="dialog_message_manual_title">HomeBar Order에 오신 것을 환영합니다.</string>
     <string name="dialog_message_manual_text">HomeBar Order를 사용하는 방법에 대해 안내드립니다. 아래의 단계를 따라주세요.</string>
@@ -28,6 +29,7 @@
     <string name="dialog_button_delete">삭제</string>
     <string name="dialog_button_save">저장</string>
     <string name="dialog_message_edit_category_text">카테고리 수정</string>
+    <string name="dialog_message_delete_menu">메뉴를 삭제하시겠습니까?</string>
 
     <string name="content_description_menu">Menu</string>
     <string name="content_description_add_category">add_category</string>
@@ -35,10 +37,32 @@
     <string name="content_description_delete_category">delete_category</string>
     <string name="content_description_back_button">back_button</string>
     <string name="content_description_info_icon">info_icon</string>
+    <string name="content_description_user_image">user_image</string>
+    <string name="content_description_add_menu_button">add_menu_button</string>
+    <string name="content_description_menu_image">menu_image</string>
+    <string name="content_description_get_menu_image">_get_menu_image</string>
+
+    <string name="drop_down_menu_item_delete">삭제</string>
+    <string name="drop_down_menu_item_edit">수정</string>
+
+    <string name="price">원</string>
+
+    <string name="menu_item_all_category">전체</string>
 
     <string name="top_appbar_title_category">Category</string>
+    <string name="top_appbar_title_menu">Menu</string>
+    <string name="top_appbar_title_edit_add_menu">메뉴추가, 수정</string>
 
     <string name="placeholder_add_category">카테고리 등록</string>
+    <string name="placeholder_search_menu">메뉴를 검색해주세요.</string>
+    <string name="placeholder_menu_name">메뉴명</string>
+    <string name="placeholder_menu_price">가격을 입력해주세요</string>
+    <string name="placeholder_menu_info">메뉴 설명</string>
+
+    <string name="button_delete_image">이미지 삭제</string>
+    <string name="button_edit_menu">수정</string>
+    <string name="button_add_menu">추가</string>
+    <string name="button_category">카테고리</string>
 
     <string name="mange_category_manual">"""카테고리를 등록해 주세요.
                         |카테고리는 등록한 순서대로 화면에 표시됩니다.
@@ -47,4 +71,5 @@
 
     <string name="drawer_menu_screen_name_menu">메뉴판</string>
     <string name="drawer_menu_screen_name_manage_category">카테고리추가, 수정</string>
+    <string name="drawer_menu_screen_name_manage_menu">메뉴추가, 수정</string>
 </resources>

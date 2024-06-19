@@ -11,4 +11,6 @@ object Constants {
 
     const val CATEGORY_DATABASE_NAME = "category_database"
     const val MENU_DATABASE_NAME = "menu_database"
+
+    const val NAVIGATION_ARGUMENT_KEY_EDIT_MENU = "menu_uid"
 }
