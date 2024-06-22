@@ -6,7 +6,6 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -17,12 +16,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -55,7 +55,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -63,7 +62,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.devik.homebarorder.R
-import com.devik.homebarorder.data.source.local.database.MenuEntity
 import com.devik.homebarorder.ui.component.topappbar.BackIconWithTitleAppBar
 import com.devik.homebarorder.ui.theme.LightGray
 import com.devik.homebarorder.ui.theme.MediumGray
@@ -106,14 +104,12 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
             }
         )
 
-        if (isMenuNameCategoryBlank) {
-            Toast.makeText(context, stringResource(R.string.message_is_category_and_menu_name_blank), Toast.LENGTH_SHORT).show()
-        }
-
         Scaffold(
             topBar = {
-                BackIconWithTitleAppBar(title = stringResource(R.string.top_appbar_title_edit_add_menu),
-                    navController = navController)
+                BackIconWithTitleAppBar(
+                    title = stringResource(R.string.top_appbar_title_edit_add_menu),
+                    navController = navController
+                )
             },
             modifier = Modifier.padding(top = 8.dp)
         ) { paddingValues ->
@@ -127,9 +123,9 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth(0.3f)
-                                .fillMaxHeight(0.25f)
-                                .padding(start = 24.dp, top = 24.dp)
+                                .width(150.dp)
+                                .height(200.dp)
+                                .padding(start = 24.dp, top = 32.dp)
                                 .background(color = MediumGray, shape = RoundedCornerShape(10.dp))
                                 .clickable {
                                     singlePhotoPickerLauncher.launch(
@@ -161,66 +157,31 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
                                 .fillMaxWidth()
                                 .padding(start = 24.dp, end = 16.dp)
                         ) {
-                            OutlinedTextField(
-                                value = menuName,
-                                maxLines = 1,
+
+                            MenuEditTextFiled(
+                                textValue = menuName,
                                 onValueChange = { viewModel.setMenuName(it) },
-                                placeholder = {
-                                    Text(
-                                        text = stringResource(R.string.placeholder_menu_name),
-                                        color = Gray
-                                    )
-                                },
-                                colors = TextFieldDefaults.outlinedTextFieldColors(
-                                    unfocusedBorderColor = Color.Black,
-                                    focusedBorderColor = Color.Black
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 24.dp)
+                                maxLines = 1,
+                                placeholder = stringResource(R.string.placeholder_menu_name)
                             )
 
-                            OutlinedTextField(
-                                value = menuPrice,
-                                maxLines = 1,
+                            MenuEditTextFiled(
+                                textValue = menuPrice,
                                 onValueChange = { value ->
                                     if (value.all { it.isDigit() }) {
                                         viewModel.setMenuPrice(value)
                                     }
                                 },
+                                maxLines = 1,
                                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                                placeholder = {
-                                    Text(
-                                        text = stringResource(R.string.placeholder_menu_price),
-                                        color = Gray
-                                    )
-                                },
-                                colors = TextFieldDefaults.outlinedTextFieldColors(
-                                    unfocusedBorderColor = Color.Black,
-                                    focusedBorderColor = Color.Black
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 24.dp)
+                                placeholder = stringResource(R.string.placeholder_menu_price)
                             )
 
-                            OutlinedTextField(
-                                value = menuInfo,
-                                maxLines = 4,
+                            MenuEditTextFiled(
+                                textValue = menuInfo,
                                 onValueChange = { viewModel.setMenuInfo(it) },
-                                placeholder = {
-                                    Text(
-                                        text = stringResource(R.string.placeholder_menu_info),
-                                        color = Gray
-                                    )
-                                },
-                                colors = TextFieldDefaults.outlinedTextFieldColors(
-                                    unfocusedBorderColor = Color.Black,
-                                    focusedBorderColor = Color.Black
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 24.dp)
+                                maxLines = 4,
+                                placeholder = stringResource(R.string.placeholder_menu_info)
                             )
 
                             Button(
@@ -294,12 +255,20 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
                 }
                 Button(
                     onClick = {
-                        if (editTargetMenuUid != null) {
-                            viewModel.updateMenu()
-                        } else {
-                            viewModel.insertMenu()
+                        if (viewModel.checkMenuNameCategoryBlank()) {
+                            if (editTargetMenuUid != null) {
+                                viewModel.updateMenu()
+                            } else {
+                                viewModel.insertMenu()
+                            }
+                            navController.navigateUp()
+                        } else{
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.message_is_category_and_menu_name_blank),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                        navController.navigateUp()
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -314,6 +283,36 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MenuEditTextFiled(
+    textValue: String,
+    onValueChange: (String) -> Unit,
+    maxLines: Int,
+    placeholder: String,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
+) {
+    OutlinedTextField(
+        value = textValue,
+        maxLines = maxLines,
+        onValueChange = onValueChange,
+        keyboardOptions = keyboardOptions,
+        placeholder = {
+            Text(
+                text = placeholder,
+                color = Gray
+            )
+        },
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            unfocusedBorderColor = Color.Black,
+            focusedBorderColor = Color.Black
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 24.dp)
+    )
 }
 
 private fun setImageBitmap(context: Context, uri: Uri): Bitmap {

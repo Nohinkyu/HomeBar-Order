@@ -40,7 +40,7 @@ class MenuEditorViewModel @Inject constructor(
     private val _menuImageBitmap = MutableStateFlow<Bitmap?>(null)
     val menuImageBitmap: StateFlow<Bitmap?> = _menuImageBitmap
 
-    private val _isMenuNameCategoryBlank = MutableStateFlow<Boolean>(false)
+    private val _isMenuNameCategoryBlank = MutableStateFlow<Boolean>(true)
     val isMenuNameCategoryBlank: StateFlow<Boolean> = _isMenuNameCategoryBlank
 
     private val _buttonTextState = MutableStateFlow<String>("")
@@ -84,6 +84,10 @@ class MenuEditorViewModel @Inject constructor(
         } else {
             _buttonTextState.value = resourceProvider.getString(R.string.button_add_menu)
         }
+    }
+
+    fun checkMenuNameCategoryBlank():Boolean {
+         return _menuName.value.isNotBlank() && _categoryList.value.contains(_menuCategory.value)
     }
 
     fun getEditTargetMenu(uid: Int) {
