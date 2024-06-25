@@ -44,6 +44,7 @@
     <string name="content_description_search_button">search_button</string>
     <string name="content_description_plus_button">plus_button</string>
     <string name="content_description_minus_button">minus_button</string>
+    <string name="content_description_all_clear">all_clear</string>
 
     <string name="drop_down_menu_item_delete">삭제</string>
     <string name="drop_down_menu_item_edit">수정</string>
@@ -66,6 +67,13 @@
     <string name="button_edit_menu">수정</string>
     <string name="button_add_menu">추가</string>
     <string name="button_category">카테고리</string>
+    
+    <string name="menu_screen_text_all_price">상품금액</string>
+    <string name="menu_screen_text_all_menu_count">주문수량</string>
+    <string name="menu_screen_text_menu_count">개</string>
+    <string name="menu_screen_button_text_all_clear">전체취소</string>
+    <string name="menu_screen_button_text_order">주문하기</string>
+
 
     <string name="mange_category_manual">"""카테고리를 등록해 주세요.
                         |카테고리는 등록한 순서대로 화면에 표시됩니다.
