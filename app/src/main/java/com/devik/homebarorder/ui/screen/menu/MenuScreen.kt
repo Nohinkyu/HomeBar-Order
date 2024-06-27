@@ -3,6 +3,7 @@ package com.devik.homebarorder.ui.screen.menu
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,12 +16,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
@@ -46,9 +48,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -193,7 +197,7 @@ fun MenuScreen(navController: NavController) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(0.65f)
+                            .fillMaxHeight(0.7f)
                             .padding(16.dp)
                             .clip(RoundedCornerShape(8.dp))
                             .background(color = LightGray),
@@ -206,15 +210,15 @@ fun MenuScreen(navController: NavController) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(0.7f)
+                            .fillMaxHeight(0.65f)
                             .background(Color.White)
                             .padding(16.dp)
                     ) {
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(start = 1.dp, end = 1.dp, bottom = 1.dp, top = 4.dp)
                                 .align(Alignment.TopCenter)
+                                .border(width = 2.dp, color = LightGray, shape = RectangleShape)
                         ) {
                             items(cartList) { menu ->
                                 CartItem(
@@ -230,33 +234,6 @@ fun MenuScreen(navController: NavController) {
                                 Alignment.TopCenter
                             )
                         )
-                        Box(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .width(1.dp)
-                                .background(LightGray)
-                                .align(
-                                    Alignment.TopEnd
-
-                                )
-                        )
-                        Box(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .width(1.dp)
-                                .background(LightGray)
-                                .align(
-                                    Alignment.TopStart
-
-                                )
-                        )
-                        Divider(
-                            thickness = 1.dp, color = LightGray, modifier = Modifier
-                                .fillMaxWidth()
-                                .align(
-                                    Alignment.BottomCenter
-                                )
-                        )
                     }
 
                     Box(
@@ -264,53 +241,60 @@ fun MenuScreen(navController: NavController) {
                             .fillMaxSize()
                             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                     ) {
-                        Box(
+                        Column(
                             modifier = Modifier
                                 .fillMaxHeight()
                                 .fillMaxWidth(0.5f)
                                 .align(Alignment.CenterStart)
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(color = LightGray)
+                                .verticalScroll(rememberScrollState()),
+                            verticalArrangement = Arrangement.SpaceBetween,
                         ) {
-                            Text(
-                                text = stringResource(R.string.menu_screen_text_all_menu_count),
-                                modifier = Modifier
-                                    .align(Alignment.TopStart)
-                                    .padding(top = 16.dp, start = 16.dp),
-                                fontSize = 24.sp
-                            )
-                            Text(
-                                text = "$allCartCount ${stringResource(R.string.menu_screen_text_menu_count)}",
-                                modifier = Modifier
-                                    .align(Alignment.TopEnd)
-                                    .padding(top = 16.dp, end = 16.dp),
-                                fontSize = 24.sp
-                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.menu_screen_text_all_menu_count),
+                                    modifier = Modifier
+                                        .padding(top = 16.dp, start = 16.dp),
+                                    fontSize = 20.sp
+                                )
+                                Text(
+                                    text = "$allCartCount ${stringResource(R.string.menu_screen_text_menu_count)}",
+                                    modifier = Modifier
+                                        .padding(top = 16.dp, end = 16.dp),
+                                    fontSize = 20.sp
+                                )
+                            }
                             Divider(
                                 thickness = 2.dp,
                                 modifier = Modifier
-                                    .align(Alignment.CenterStart)
-                                    .padding(start = 8.dp, end = 8.dp),
+                                    .padding(8.dp),
                                 color = MediumGray
                             )
-                            Text(
-                                text = stringResource(R.string.menu_screen_text_all_price),
-                                modifier = Modifier
-                                    .align(Alignment.BottomStart)
-                                    .padding(bottom = 16.dp, start = 16.dp),
-                                fontSize = 24.sp
-                            )
-                            Text(
-                                text = TextFormatUtil.priceTextFormat(
-                                    allCartPrice,
-                                    stringResource(R.string.price)
-                                ),
-                                modifier = Modifier
-                                    .align(Alignment.BottomEnd)
-                                    .padding(bottom = 16.dp, end = 16.dp),
-                                fontSize = 24.sp,
-                                color = OrangeSoda
-                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.menu_screen_text_all_price),
+                                    modifier = Modifier
+                                        .padding(bottom = 16.dp, start = 16.dp),
+                                    fontSize = 20.sp
+                                )
+                                Text(
+                                    text = TextFormatUtil.priceTextFormat(
+                                        allCartPrice,
+                                        stringResource(R.string.price)
+                                    ),
+                                    modifier = Modifier
+                                        .padding(bottom = 16.dp, end = 16.dp),
+                                    fontSize = 20.sp,
+                                    color = OrangeSoda
+                                )
+                            }
                         }
                         Box(
                             modifier = Modifier
@@ -319,34 +303,34 @@ fun MenuScreen(navController: NavController) {
                                 .align(Alignment.CenterEnd)
                                 .padding(start = 16.dp)
                         ) {
-                            Box(
+
+                            Column(
                                 modifier = Modifier
                                     .fillMaxHeight()
                                     .fillMaxWidth(0.3f)
                                     .clip(RoundedCornerShape(8.dp))
                                     .background(color = DarkGray)
                                     .clickable { viewModel.clearCart() }
+                                    .verticalScroll(rememberScrollState()),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Clear,
                                     contentDescription = stringResource(R.string.content_description_all_clear),
                                     tint = Color.White,
                                     modifier = Modifier
-                                        .fillMaxSize(0.6f)
-                                        .align(Alignment.TopCenter)
-                                        .padding(top = 20.dp)
+                                        .size(48.dp)
+                                        .padding(top = 16.dp)
                                 )
-
+                                Spacer(modifier = Modifier.size(16.dp))
                                 Text(
                                     text = stringResource(R.string.menu_screen_button_text_all_clear),
                                     color = Color.White,
                                     modifier = Modifier
-                                        .align(Alignment.BottomCenter)
                                         .padding(bottom = 16.dp),
                                     fontSize = 18.sp
                                 )
                             }
-
                             Button(
                                 onClick = {
                                     if (cartList.isEmpty()) {
@@ -370,7 +354,10 @@ fun MenuScreen(navController: NavController) {
                             ) {
                                 Text(
                                     text = stringResource(R.string.menu_screen_button_text_order),
-                                    fontSize = 24.sp
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    maxLines = 1,
+                                    textAlign = TextAlign.Center
                                 )
                             }
                         }
@@ -438,45 +425,38 @@ private fun CartItem(
     onPlusClick: () -> Unit,
     onMinusClick: () -> Unit
 ) {
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(64.dp)
-            .background(color = Color.White)
+            .padding(end = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(
+        Text(
+            text = cartMenuItem.menuName,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            fontSize = 18.sp,
+            modifier = Modifier.padding(start = 32.dp)
+        )
+        Text(
+            text = TextFormatUtil.priceTextFormat(
+                cartMenuItem.menuPrice * cartMenuItem.menuCount, stringResource(
+                    R.string.price
+                )
+            ),
+            color = OrangeSoda,
             modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth(0.4f)
-                .padding(start = 32.dp),
-        ) {
-            Text(
-                text = cartMenuItem.menuName,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                fontSize = 18.sp,
-                modifier = Modifier.align(Alignment.CenterStart)
-            )
-            Text(
-                text = TextFormatUtil.priceTextFormat(
-                    cartMenuItem.menuPrice * cartMenuItem.menuCount, stringResource(
-                        R.string.price
-                    )
-                ),
-                color = OrangeSoda,
-                modifier = Modifier
-                    .padding(end = 48.dp)
-                    .align(Alignment.CenterEnd),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                fontSize = 18.sp
-            )
-        }
+                .padding(end = 48.dp),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            fontSize = 18.sp
+        )
+
         Row(
             modifier = Modifier
-                .fillMaxHeight()
-                .align(Alignment.CenterEnd)
-                .padding(end = 16.dp),
+                .height(64.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
@@ -516,30 +496,21 @@ private fun CartItem(
                     tint = Color.Black
                 )
             }
-
-            Spacer(modifier = Modifier.width(64.dp))
-
-            IconButton(
-                onClick = onDeleteClick,
-                modifier = Modifier
-                    .size(48.dp)
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(color = OrangeSoda),
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = "",
-                    modifier = Modifier.fillMaxSize(),
-                    tint = Color.White
-                )
-            }
         }
-        Divider(
-            thickness = 1.dp, color = LightGray, modifier = Modifier
-                .fillMaxWidth()
-                .align(
-                    Alignment.BottomCenter
-                )
-        )
+        IconButton(
+            onClick = onDeleteClick,
+            modifier = Modifier
+                .size(48.dp)
+                .clip(RoundedCornerShape(5.dp))
+                .background(color = OrangeSoda),
+        ) {
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "",
+                modifier = Modifier.fillMaxSize(),
+                tint = Color.White
+            )
+        }
     }
+    Divider(thickness = 1.dp, color = LightGray, modifier = Modifier.fillMaxWidth())
 }
