@@ -31,6 +31,17 @@
     <string name="dialog_message_edit_category_text">카테고리 수정</string>
     <string name="dialog_message_delete_menu">메뉴를 삭제하시겠습니까?</string>
 
+    <string name="order_dialog_title">주문내역확인</string>
+    <string name="order_dialog_body">주문정보를 확인해 주세요.</string>
+    <string name="order_dialog_menu_name">상품명</string>
+    <string name="order_dialog_menu_count">수량</string>
+    <string name="order_dialog_menu_price">가격</string>
+    <string name="order_dialog_all_count">총 수량</string>
+    <string name="order_dialog_all_price">상품금액</string>
+    <string name="order_dialog_order">주문하기</string>
+
+
+
     <string name="content_description_menu">Menu</string>
     <string name="content_description_add_category">add_category</string>
     <string name="content_description_edit_category">edit_category</string>
@@ -50,6 +61,7 @@
     <string name="drop_down_menu_item_edit">수정</string>
 
     <string name="price">원</string>
+    <string name="count">개</string>
 
     <string name="menu_item_all_category">전체</string>
 
