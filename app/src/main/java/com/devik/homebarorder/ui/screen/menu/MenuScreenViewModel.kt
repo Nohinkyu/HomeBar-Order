@@ -5,11 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.devik.homebarorder.data.model.CartMenuItem
 import com.devik.homebarorder.data.repository.CategoryRepository
 import com.devik.homebarorder.data.repository.MenuRepository
+import com.devik.homebarorder.data.repository.RemoteOrderRepository
 import com.devik.homebarorder.data.source.local.database.CategoryEntity
 import com.devik.homebarorder.data.source.local.database.MenuEntity
 import com.devik.homebarorder.data.source.local.database.PreferenceManager
 import com.devik.homebarorder.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,6 +22,7 @@ class MenuScreenViewModel @Inject constructor(
     private val preferenceManager: PreferenceManager,
     private val categoryRepository: CategoryRepository,
     private val menuRepository: MenuRepository,
+    private val remoteOrderRepository: RemoteOrderRepository,
 ) :
     ViewModel() {
 
@@ -54,10 +57,22 @@ class MenuScreenViewModel @Inject constructor(
     val addTargetCartMenuCount: StateFlow<Int> = _addTargetCartMenuCount
 
     private val _allCartPrice = MutableStateFlow<Int>(0)
-    val allCartPrice:StateFlow<Int> = _allCartPrice
+    val allCartPrice: StateFlow<Int> = _allCartPrice
 
     private val _allCartCount = MutableStateFlow<Int>(0)
-    val allCartCount:StateFlow<Int> = _allCartCount
+    val allCartCount: StateFlow<Int> = _allCartCount
+
+    private val _orderListDialogState = MutableStateFlow<Boolean>(false)
+    val orderListDialogState: StateFlow<Boolean> = _orderListDialogState
+
+    private val _isOrderInProgress = MutableStateFlow<Boolean>(false)
+    val isOrderInProgress: StateFlow<Boolean> = _isOrderInProgress
+
+    private val _isOrderSuccess = MutableStateFlow<Boolean>(false)
+    val isOrderSuccess: StateFlow<Boolean> = _isOrderSuccess
+
+    private val _isOrderFail = MutableStateFlow<Boolean>(false)
+    val isOrderFail: StateFlow<Boolean> = _isOrderFail
 
     init {
         viewModelScope.launch {
@@ -171,5 +186,35 @@ class MenuScreenViewModel @Inject constructor(
 
     fun clearCart() {
         _cartList.value = emptyList()
+    }
+
+    fun openOrderListDialog() {
+        _orderListDialogState.value = true
+    }
+
+    fun closeOrderListDialog() {
+        _orderListDialogState.value = false
+    }
+
+    fun insertOrder() {
+        viewModelScope.launch {
+            _isOrderInProgress.value = true
+            val result = async { remoteOrderRepository.insertOrder(_cartList.value) }.await()
+            _isOrderInProgress.value = false
+            if (result) {
+                _isOrderSuccess.value = true
+                _cartList.value = emptyList()
+            } else {
+                _isOrderFail.value = true
+            }
+        }
+    }
+
+    fun closeOrderSuccessDialog() {
+        _isOrderSuccess.value = false
+    }
+
+    fun closeOrderFailDialog() {
+        _isOrderFail.value = false
     }
 }

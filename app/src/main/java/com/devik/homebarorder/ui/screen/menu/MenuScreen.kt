@@ -1,5 +1,6 @@
 package com.devik.homebarorder.ui.screen.menu
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -59,6 +61,9 @@ import com.devik.homebarorder.ui.component.drawermenu.DrawerNaviMenu
 import com.devik.homebarorder.ui.component.topappbar.MenuIconWithTitleAppBar
 import com.devik.homebarorder.ui.dialog.AddMenuDialog
 import com.devik.homebarorder.ui.dialog.ManualDialog
+import com.devik.homebarorder.ui.dialog.OrderInProgressDialog
+import com.devik.homebarorder.ui.dialog.OrderListDialog
+import com.devik.homebarorder.ui.dialog.OrderResultDialog
 import com.devik.homebarorder.ui.theme.DarkGray
 import com.devik.homebarorder.ui.theme.LightGray
 import com.devik.homebarorder.ui.theme.MediumGray
@@ -73,6 +78,8 @@ fun MenuScreen(navController: NavController) {
     CompositionLocalProvider(
         androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current,
     ) {
+
+        val context = LocalContext.current
         val viewModel: MenuScreenViewModel = hiltViewModel()
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val manualDialogState by viewModel.manualDialogState.collectAsStateWithLifecycle()
@@ -85,6 +92,10 @@ fun MenuScreen(navController: NavController) {
         val addTargetCartMenuCount by viewModel.addTargetCartMenuCount.collectAsStateWithLifecycle()
         val allCartPrice by viewModel.allCartPrice.collectAsStateWithLifecycle()
         val allCartCount by viewModel.allCartCount.collectAsStateWithLifecycle()
+        val orderListDialogState by viewModel.orderListDialogState.collectAsStateWithLifecycle()
+        val isOrderInProgress by viewModel.isOrderInProgress.collectAsStateWithLifecycle()
+        val isOrderSuccess by viewModel.isOrderSuccess.collectAsStateWithLifecycle()
+        val isOrderFail by viewModel.isOrderFail.collectAsStateWithLifecycle()
 
         val scope = rememberCoroutineScope()
 
@@ -98,6 +109,7 @@ fun MenuScreen(navController: NavController) {
                 viewModel.manualDialogDismissRequest()
             }
         }
+
         if (addCartDialogState && addTargetCartMenu != null) {
             AddMenuDialog(
                 menuEntity = addTargetCartMenu!!,
@@ -106,6 +118,39 @@ fun MenuScreen(navController: NavController) {
                 onMinusClick = { viewModel.minusTargetMenuCount() },
                 onPlusClick = { viewModel.plusTargetMenuCount() },
                 onAddClick = { viewModel.addCart() }
+            )
+        }
+
+        if (orderListDialogState) {
+            OrderListDialog(
+                cartMenuItemList = cartList,
+                onDismissRequest = { viewModel.closeOrderListDialog() },
+                cartMenuItemAllPrice = allCartPrice,
+                cartMenuItemCount = allCartCount,
+                onOrderClick = {
+                    viewModel.insertOrder()
+                    viewModel.closeOrderListDialog()
+                }
+            )
+        }
+
+        if (isOrderInProgress) {
+            OrderInProgressDialog()
+        }
+
+        if (isOrderSuccess) {
+            OrderResultDialog(
+                onDismissRequest = { viewModel.closeOrderSuccessDialog() },
+                resultMessageTitle = stringResource(R.string.order_result_dialog_success_title),
+                resultMessageBody = stringResource(R.string.order_result_dialog_success_body)
+            )
+        }
+
+        if (isOrderFail) {
+            OrderResultDialog(
+                onDismissRequest = { viewModel.closeOrderFailDialog() },
+                resultMessageTitle = stringResource(R.string.order_result_dialog_fail_title),
+                resultMessageBody = stringResource(R.string.order_result_dialog_fail_body).trimMargin()
             )
         }
 
@@ -304,7 +349,19 @@ fun MenuScreen(navController: NavController) {
                             }
 
                             Button(
-                                onClick = { /*TODO*/ }, modifier = Modifier
+                                onClick = {
+                                    if (cartList.isEmpty()) {
+                                        Toast.makeText(
+                                            context,
+                                            context.getString(R.string.message_is_cart_blank),
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
+                                    } else {
+                                        viewModel.openOrderListDialog()
+                                    }
+                                },
+                                modifier = Modifier
                                     .fillMaxHeight()
                                     .fillMaxWidth(0.7f)
                                     .align(Alignment.CenterEnd)
