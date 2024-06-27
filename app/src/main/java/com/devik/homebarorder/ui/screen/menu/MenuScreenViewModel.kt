@@ -100,7 +100,9 @@ class MenuScreenViewModel @Inject constructor(
     fun getAllCategoryList() {
         viewModelScope.launch {
             _allCategoryList.value = categoryRepository.getAllCategory()
-            _selectedCategory.value = _allCategoryList.value.first()
+            if(_allCategoryList.value.isNotEmpty()){
+                _selectedCategory.value = _allCategoryList.value.first()
+            }
         }
     }
 
