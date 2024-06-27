@@ -143,11 +143,12 @@ fun AddMenuDialog(
                                 Spacer(modifier = Modifier.width(64.dp))
 
                                 Text(
-                                    text = "${TextFormatUtil.thousandsComma.format(menuEntity.menuPrice * menuCount)} ${
-                                        stringResource(
+                                    text = TextFormatUtil.priceTextFormat(
+                                        menuEntity.menuPrice * menuCount, stringResource(
                                             R.string.price
                                         )
-                                    }", fontSize = 20.sp, color = OrangeSoda
+                                    ),
+                                    fontSize = 20.sp, color = OrangeSoda
                                 )
                             }
                             Spacer(modifier = Modifier.size(8.dp))
@@ -188,7 +189,11 @@ fun AddMenuDialog(
                         shape = RoundedCornerShape(5.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = OrangeSoda)
                     ) {
-                        Text(text = stringResource(R.string.button_add_menu), color = Color.White, fontSize = 16.sp)
+                        Text(
+                            text = stringResource(R.string.button_add_menu),
+                            color = Color.White,
+                            fontSize = 16.sp
+                        )
                     }
                 }
             }

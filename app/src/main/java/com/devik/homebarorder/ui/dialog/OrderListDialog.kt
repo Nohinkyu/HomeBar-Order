@@ -169,11 +169,12 @@ fun OrderListDialog(
                             fontSize = 20.sp
                         )
                         Text(
-                            text = "${TextFormatUtil.thousandsComma.format(cartMenuItemAllPrice)} ${
-                                stringResource(
+                            text = TextFormatUtil.priceTextFormat(
+                                cartMenuItemAllPrice, stringResource(
                                     R.string.price
                                 )
-                            }", fontSize = 20.sp, color = OrangeSoda
+                            ),
+                            fontSize = 20.sp, color = OrangeSoda
                         )
                     }
                 }

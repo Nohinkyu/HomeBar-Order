@@ -301,11 +301,10 @@ fun MenuScreen(navController: NavController) {
                                 fontSize = 24.sp
                             )
                             Text(
-                                text = "${TextFormatUtil.thousandsComma.format(allCartPrice)} ${
-                                    stringResource(
-                                        R.string.price
-                                    )
-                                }",
+                                text = TextFormatUtil.priceTextFormat(
+                                    allCartPrice,
+                                    stringResource(R.string.price)
+                                ),
                                 modifier = Modifier
                                     .align(Alignment.BottomEnd)
                                     .padding(bottom = 16.dp, end = 16.dp),
@@ -459,11 +458,11 @@ private fun CartItem(
                 modifier = Modifier.align(Alignment.CenterStart)
             )
             Text(
-                text = "${TextFormatUtil.thousandsComma.format(cartMenuItem.menuPrice * cartMenuItem.menuCount)} ${
-                    stringResource(
+                text = TextFormatUtil.priceTextFormat(
+                    cartMenuItem.menuPrice * cartMenuItem.menuCount, stringResource(
                         R.string.price
                     )
-                }",
+                ),
                 color = OrangeSoda,
                 modifier = Modifier
                     .padding(end = 48.dp)

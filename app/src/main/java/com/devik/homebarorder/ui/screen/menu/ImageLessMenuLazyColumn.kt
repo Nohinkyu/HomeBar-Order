@@ -55,9 +55,11 @@ fun ImageLessColumnMenuItem(menu: MenuEntity, onClick: () -> Unit) {
             .clickable { onClick() },
         elevation = CardDefaults.cardElevation(5.dp)
     ) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.White)
+        ) {
             Text(
                 text = menu.menuName,
                 fontSize = 20.sp,
@@ -76,11 +78,12 @@ fun ImageLessColumnMenuItem(menu: MenuEntity, onClick: () -> Unit) {
             )
 
             Text(
-                text = "${TextFormatUtil.thousandsComma.format(menu.menuPrice)} ${
+                text = TextFormatUtil.priceTextFormat(
+                    menu.menuPrice,
                     stringResource(
                         R.string.price
                     )
-                }",
+                ),
                 fontSize = 18.sp,
                 color = OrangeSoda,
                 modifier = Modifier

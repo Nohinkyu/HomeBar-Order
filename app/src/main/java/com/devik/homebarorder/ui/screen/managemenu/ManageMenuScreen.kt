@@ -336,9 +336,11 @@ private fun MenuItem(
                             color = Gray
                         )
                         Text(
-                            text = "${TextFormatUtil.thousandsComma.format(menuEntity.menuPrice)} ${stringResource(
-                                R.string.price
-                            )}",
+                            text = TextFormatUtil.priceTextFormat(
+                                menuEntity.menuPrice, stringResource(
+                                    R.string.price
+                                )
+                            ),
                             modifier = Modifier
                                 .align(Alignment.BottomStart)
                                 .padding(bottom = 8.dp),
@@ -362,13 +364,23 @@ private fun MenuItem(
                         modifier = Modifier.background(Color.White)
                     ) {
                         DropdownMenuItem(
-                            text = { Text(text = stringResource(R.string.drop_down_menu_item_edit), color = Color.Black) },
+                            text = {
+                                Text(
+                                    text = stringResource(R.string.drop_down_menu_item_edit),
+                                    color = Color.Black
+                                )
+                            },
                             onClick = {
                                 onEditClick()
                                 expandStatus = false
                             })
                         DropdownMenuItem(
-                            text = { Text(text = stringResource(R.string.drop_down_menu_item_delete), color = Color.Red) },
+                            text = {
+                                Text(
+                                    text = stringResource(R.string.drop_down_menu_item_delete),
+                                    color = Color.Red
+                                )
+                            },
                             onClick = {
                                 onDeleteClick()
                                 expandStatus = false

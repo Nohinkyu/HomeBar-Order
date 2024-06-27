@@ -58,11 +58,13 @@ fun ImageColumnMenuItem(
     onClick: () -> Unit
 ) {
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .height(160.dp)
-        .padding(start = 24.dp, end = 24.dp)
-        .clickable { onClick() },) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(160.dp)
+            .padding(start = 24.dp, end = 24.dp)
+            .clickable { onClick() },
+    ) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -113,9 +115,11 @@ fun ImageColumnMenuItem(
                             color = Color.Gray
                         )
                         Text(
-                            text = "${TextFormatUtil.thousandsComma.format(menu.menuPrice)} ${stringResource(
-                                R.string.price
-                            )}",
+                            text = TextFormatUtil.priceTextFormat(
+                                menu.menuPrice, stringResource(
+                                    R.string.price
+                                )
+                            ),
                             modifier = Modifier
                                 .align(Alignment.BottomStart)
                                 .padding(bottom = 8.dp),

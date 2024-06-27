@@ -42,7 +42,7 @@ fun GridMenuLazyVerticalGrid(menuList: List<MenuEntity>, onMenuClick: (MenuEntit
             key = { menu -> menu.uid }) { menu ->
             GridMenuItem(
                 menu = menu,
-                onClick = {onMenuClick(menu)}
+                onClick = { onMenuClick(menu) }
             )
         }
     }
@@ -78,11 +78,11 @@ fun GridMenuItem(menu: MenuEntity, onClick: () -> Unit) {
 
             Text(
                 modifier = Modifier.padding(top = 16.dp),
-                text = "${TextFormatUtil.thousandsComma.format(menu.menuPrice)} ${
-                    stringResource(
+                text = TextFormatUtil.priceTextFormat(
+                    menu.menuPrice, stringResource(
                         R.string.price
                     )
-                }",
+                ),
                 fontSize = 16.sp,
                 color = OrangeSoda
             )
