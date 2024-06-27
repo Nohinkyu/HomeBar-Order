@@ -72,7 +72,7 @@ fun ManageCategoryScreen(navController: NavController) {
             topBar = {
                 BackIconWithTitleAppBar(
                     title = stringResource(R.string.top_appbar_title_category),
-                    onBackButtonClick = {navController.popBackStack()}
+                    navController = navController
                 )
             },
             modifier = Modifier.padding(8.dp)

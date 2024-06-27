@@ -53,6 +53,10 @@ fun DrawerNaviMenu(
         ScreenInfo(
             stringResource(R.string.drawer_menu_screen_name_manage_category),
             NavigationRoute.MANAGE_CATEGORY_SCREEN
+        ),
+        ScreenInfo(
+            stringResource(R.string.drawer_menu_screen_name_manage_menu),
+            NavigationRoute.MANAGE_MENU_SCREEN
         )
     )
     var selectedItem by rememberSaveable { mutableStateOf(0) }
@@ -117,7 +121,7 @@ private fun DrawerMenuHeader() {
         ) {
             AsyncImage(
                 model = userImageState.substring(1, userImageState.length - 1),
-                contentDescription = null,
+                contentDescription = stringResource(R.string.content_description_user_image),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
