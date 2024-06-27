@@ -13,4 +13,9 @@ object Constants {
     const val MENU_DATABASE_NAME = "menu_database"
 
     const val NAVIGATION_ARGUMENT_KEY_EDIT_MENU = "menu_uid"
+
+    const val SUPABASE_DB_TABLE_NAME ="order_list"
+    const val SUPABASE_DB_COLUMN_CREATE_AT ="create_at"
+    const val SUPABASE_DB_COLUMN_ORDER ="order"
+    const val SUPABASE_DB_COLUMN_ORDER_USER_MAIL = "order_user_mail"
 }
