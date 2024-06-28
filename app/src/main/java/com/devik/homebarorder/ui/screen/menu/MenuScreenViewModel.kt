@@ -74,6 +74,9 @@ class MenuScreenViewModel @Inject constructor(
     private val _isOrderFail = MutableStateFlow<Boolean>(false)
     val isOrderFail: StateFlow<Boolean> = _isOrderFail
 
+    private val _menuListFormatState = MutableStateFlow<String>("")
+    val menuListFormatState: StateFlow<String> = _menuListFormatState
+
     init {
         viewModelScope.launch {
             _cartList.collect { cartList ->
@@ -100,7 +103,7 @@ class MenuScreenViewModel @Inject constructor(
     fun getAllCategoryList() {
         viewModelScope.launch {
             _allCategoryList.value = categoryRepository.getAllCategory()
-            if(_allCategoryList.value.isNotEmpty()){
+            if (_allCategoryList.value.isNotEmpty()) {
                 _selectedCategory.value = _allCategoryList.value.first()
             }
         }
@@ -218,5 +221,9 @@ class MenuScreenViewModel @Inject constructor(
 
     fun closeOrderFailDialog() {
         _isOrderFail.value = false
+    }
+
+    fun getMenuListFormatState() {
+        _menuListFormatState.value = preferenceManager.getString(Constants.KEY_MENU_LIST_STATE, "")
     }
 }
