@@ -12,6 +12,7 @@ import com.devik.homebarorder.ui.screen.managecategory.ManageCategoryScreen
 import com.devik.homebarorder.ui.screen.managemenu.ManageMenuScreen
 import com.devik.homebarorder.ui.screen.menu.MenuScreen
 import com.devik.homebarorder.ui.screen.menueditorscreen.MenuEditorScreen
+import com.devik.homebarorder.ui.screen.setting.SettingScreen
 import com.devik.homebarorder.ui.screen.signin.SignInScreen
 import com.devik.homebarorder.util.Constants
 
@@ -43,6 +44,9 @@ fun ScreenNavigation(navController: NavHostController) {
         composable(NavigationRoute.MENU_EDITOR_SCREEN){
             MenuEditorScreen(navController = navController)
         }
+        composable(NavigationRoute.SETTING_SCREEN){
+            SettingScreen(navController = navController)
+        }
         composable(
             route = "${NavigationRoute.MENU_EDITOR_SCREEN}/{${Constants.NAVIGATION_ARGUMENT_KEY_EDIT_MENU}}",
             arguments = listOf(navArgument(Constants.NAVIGATION_ARGUMENT_KEY_EDIT_MENU) {
@@ -61,4 +65,5 @@ object NavigationRoute {
     const val MANAGE_CATEGORY_SCREEN = "manage_category_screen"
     const val MANAGE_MENU_SCREEN = "manage_menu_screen"
     const val MENU_EDITOR_SCREEN = "menu_editor_screen"
+    const val SETTING_SCREEN = "setting_screen"
 }
