@@ -18,4 +18,9 @@ object Constants {
     const val SUPABASE_DB_COLUMN_CREATE_AT ="create_at"
     const val SUPABASE_DB_COLUMN_ORDER ="order"
     const val SUPABASE_DB_COLUMN_ORDER_USER_MAIL = "order_user_mail"
+
+    const val KEY_MENU_LIST_STATE = "menu_list_state"
+    const val IMAGE_GRID_STATE = "image_grid"
+    const val IMAGE_LIST_STATE = "image_list"
+    const val NO_IMAGE_LIST_STATE = "no_image_list"
 }

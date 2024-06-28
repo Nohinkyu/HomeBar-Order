@@ -30,4 +30,11 @@ class PreferenceManager constructor(@ApplicationContext context: Context) {
     fun getBoolean(key: String, defValue: Boolean): Boolean {
         return sharedPreference.getBoolean(key, defValue)
     }
+
+    fun removeString(key: String) {
+        with(sharedPreference.edit()) {
+            remove(key)
+            apply()
+        }
+    }
 }

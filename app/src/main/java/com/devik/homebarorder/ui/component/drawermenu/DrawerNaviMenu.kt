@@ -57,7 +57,12 @@ fun DrawerNaviMenu(
         ScreenInfo(
             stringResource(R.string.drawer_menu_screen_name_manage_menu),
             NavigationRoute.MANAGE_MENU_SCREEN
+        ),
+        ScreenInfo(
+            stringResource(R.string.drawer_menu_screen_name_setting),
+            NavigationRoute.SETTING_SCREEN
         )
+
     )
     var selectedItem by rememberSaveable { mutableStateOf(0) }
     val gesturesEnabled = drawerState.currentValue == DrawerValue.Open
