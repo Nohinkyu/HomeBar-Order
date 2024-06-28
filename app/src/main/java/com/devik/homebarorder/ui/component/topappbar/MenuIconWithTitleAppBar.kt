@@ -11,13 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import com.devik.homebarorder.R
+import com.devik.homebarorder.ui.theme.OrangeSoda
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenuIconWithTitleAppBar(title: String, menuIconOnClick: () -> Unit) {
     CenterAlignedTopAppBar(
         title = {
-            Text(text = title, fontSize = 24.sp)
+            Text(text = title, fontSize = 24.sp, color = OrangeSoda)
         },
         navigationIcon = {
             IconButton(onClick = {menuIconOnClick()}) {
