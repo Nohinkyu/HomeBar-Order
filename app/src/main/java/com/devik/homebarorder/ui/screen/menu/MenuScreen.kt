@@ -72,6 +72,7 @@ import com.devik.homebarorder.ui.theme.DarkGray
 import com.devik.homebarorder.ui.theme.LightGray
 import com.devik.homebarorder.ui.theme.MediumGray
 import com.devik.homebarorder.ui.theme.OrangeSoda
+import com.devik.homebarorder.util.Constants
 import com.devik.homebarorder.util.TextFormatUtil
 import kotlinx.coroutines.launch
 
@@ -100,13 +101,17 @@ fun MenuScreen(navController: NavController) {
         val isOrderInProgress by viewModel.isOrderInProgress.collectAsStateWithLifecycle()
         val isOrderSuccess by viewModel.isOrderSuccess.collectAsStateWithLifecycle()
         val isOrderFail by viewModel.isOrderFail.collectAsStateWithLifecycle()
+        val menuListFormatState by viewModel.menuListFormatState.collectAsStateWithLifecycle()
 
         val scope = rememberCoroutineScope()
 
         LaunchedEffect(Unit) {
-            viewModel.getAllCategoryList()
-            viewModel.checkIsFirstSignIn()
-            viewModel.getAllMenuList()
+            with(viewModel) {
+                getAllCategoryList()
+                checkIsFirstSignIn()
+                getAllMenuList()
+                getMenuListFormatState()
+            }
         }
         if (manualDialogState) {
             ManualDialog() {
@@ -202,10 +207,32 @@ fun MenuScreen(navController: NavController) {
                             .clip(RoundedCornerShape(8.dp))
                             .background(color = LightGray),
                     ) {
-                        GridMenuLazyVerticalGrid(
-                            menuList = selectedCategoryMenu,
-                            onMenuClick = { viewModel.openAddCartDialog(it) }
-                        )
+                        when (menuListFormatState) {
+                            Constants.IMAGE_GRID_STATE -> {
+                                GridMenuLazyVerticalGrid(
+                                    menuList = selectedCategoryMenu,
+                                    onMenuClick = { viewModel.openAddCartDialog(it) }
+                                )
+                            }
+                            Constants.IMAGE_LIST_STATE -> {
+                                ImageMenuLazyColumn(
+                                    menuList = selectedCategoryMenu,
+                                    onMenuClick = { viewModel.openAddCartDialog(it) }
+                                )
+                            }
+                            Constants.NO_IMAGE_LIST_STATE -> {
+                                ImageLessMenuLazyColumn(
+                                    menuList = selectedCategoryMenu,
+                                    onMenuClick = { viewModel.openAddCartDialog(it)}
+                                )
+                            }
+                            else -> {
+                                GridMenuLazyVerticalGrid(
+                                    menuList = selectedCategoryMenu,
+                                    onMenuClick = { viewModel.openAddCartDialog(it) }
+                                )
+                            }
+                        }
                     }
                     Box(
                         modifier = Modifier

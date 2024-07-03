@@ -31,6 +31,7 @@ android {
         buildConfigField("String", "GOOGLE_CLIENT_ID", localProperties.getProperty("google_client_id"))
         buildConfigField("String", "SUPABASE_PROJECT_URL", localProperties.getProperty("supabase_project_url"))
         buildConfigField("String", "SUPABASE_PROJECT_API_KEY", localProperties.getProperty("supabase_project_api_key"))
+        buildConfigField("String", "GOOGLE_FORMS_URL", localProperties.getProperty("google_forms_url"))
     }
 
     buildTypes {
