@@ -63,7 +63,6 @@ import com.devik.homebarorder.ui.component.topappbar.BackAndSearchIconAppBar
 import com.devik.homebarorder.ui.component.topappbar.SearchAppBar
 import com.devik.homebarorder.ui.dialog.YesOrNoDialog
 import com.devik.homebarorder.ui.theme.LightGray
-import com.devik.homebarorder.ui.theme.MediumGray
 import com.devik.homebarorder.ui.theme.OrangeSoda
 import com.devik.homebarorder.util.TextFormatUtil
 
@@ -329,7 +328,7 @@ private fun MenuItem(
                             fontSize = 18.sp
                         )
                         Text(
-                            text = menuEntity.menuInto, modifier = Modifier
+                            text = menuEntity.menuInfo, modifier = Modifier
                                 .align(Alignment.TopStart)
                                 .padding(top = 48.dp),
                             fontSize = 14.sp,

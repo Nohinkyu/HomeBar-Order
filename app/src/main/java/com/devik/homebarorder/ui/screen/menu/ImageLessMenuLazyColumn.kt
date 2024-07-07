@@ -69,7 +69,7 @@ fun ImageLessColumnMenuItem(menu: MenuEntity, onClick: () -> Unit) {
             )
 
             Text(
-                text = menu.menuInto,
+                text = menu.menuInfo,
                 fontSize = 16.sp,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
