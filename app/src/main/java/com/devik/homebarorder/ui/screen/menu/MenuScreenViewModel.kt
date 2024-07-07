@@ -77,6 +77,9 @@ class MenuScreenViewModel @Inject constructor(
     private val _menuListFormatState = MutableStateFlow<String>("")
     val menuListFormatState: StateFlow<String> = _menuListFormatState
 
+    private val _orderNumberState = MutableStateFlow<Int>(0)
+    val orderNumberState: StateFlow<Int> = _orderNumberState
+
     init {
         viewModelScope.launch {
             _cartList.collect { cartList ->
@@ -209,6 +212,7 @@ class MenuScreenViewModel @Inject constructor(
             if (result) {
                 _isOrderSuccess.value = true
                 _cartList.value = emptyList()
+                _orderNumberState.value = preferenceManager.getInt(Constants.KEY_ORDER_NUMBER)
             } else {
                 _isOrderFail.value = true
             }

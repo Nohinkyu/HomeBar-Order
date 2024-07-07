@@ -37,4 +37,15 @@ class PreferenceManager constructor(@ApplicationContext context: Context) {
             apply()
         }
     }
+
+    fun putInt(key: String, value: Int) {
+        with(sharedPreference.edit()) {
+            putInt(key, value)
+            apply()
+        }
+    }
+
+    fun getInt(key: String): Int {
+        return sharedPreference.getInt(key, 0)
+    }
 }
