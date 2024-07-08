@@ -109,7 +109,7 @@ class MenuEditorViewModel @Inject constructor(
         val menuPrice = if (_menuPrice.value.isBlank()) {
             0
         } else {
-            _menuPrice.value.toInt()
+            _menuPrice.value.toLong()
         }
         viewModelScope.launch {
             if (_menuName.value.isNotBlank() && _categoryList.value.contains(_menuCategory.value)) {
@@ -131,7 +131,7 @@ class MenuEditorViewModel @Inject constructor(
         val menuPrice = if (_menuPrice.value.isBlank()) {
             0
         } else {
-            _menuPrice.value.toInt()
+            _menuPrice.value.toLong()
         }
         viewModelScope.launch {
             if (_menuName.value.isNotBlank() && _categoryList.value.contains(_menuCategory.value)) {

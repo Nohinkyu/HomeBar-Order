@@ -56,8 +56,8 @@ class MenuScreenViewModel @Inject constructor(
     private val _addTargetCartMenuCount = MutableStateFlow<Int>(1)
     val addTargetCartMenuCount: StateFlow<Int> = _addTargetCartMenuCount
 
-    private val _allCartPrice = MutableStateFlow<Int>(0)
-    val allCartPrice: StateFlow<Int> = _allCartPrice
+    private val _allCartPrice = MutableStateFlow<Long>(0)
+    val allCartPrice: StateFlow<Long> = _allCartPrice
 
     private val _allCartCount = MutableStateFlow<Int>(0)
     val allCartCount: StateFlow<Int> = _allCartCount

@@ -44,7 +44,7 @@ fun OrderListDialog(
     cartMenuItemList: List<CartMenuItem>,
     onDismissRequest: () -> Unit,
     cartMenuItemCount: Int,
-    cartMenuItemAllPrice: Int,
+    cartMenuItemAllPrice: Long,
     onOrderClick: () -> Unit
 ) {
     Dialog(
