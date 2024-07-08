@@ -43,6 +43,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,6 +63,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.devik.homebarorder.R
+import com.devik.homebarorder.extension.throttledClickable
 import com.devik.homebarorder.ui.component.topappbar.BackIconWithTitleAppBar
 import com.devik.homebarorder.ui.theme.LightGray
 import com.devik.homebarorder.ui.theme.MediumGray
@@ -76,6 +78,7 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
     ) {
         val viewModel: MenuEditorViewModel = hiltViewModel()
         val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
 
         val menuCategory by viewModel.menuCategory.collectAsStateWithLifecycle()
         val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
@@ -127,13 +130,16 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
                                 .height(200.dp)
                                 .padding(start = 24.dp, top = 32.dp)
                                 .background(color = MediumGray, shape = RoundedCornerShape(10.dp))
-                                .clickable {
-                                    singlePhotoPickerLauncher.launch(
-                                        PickVisualMediaRequest(
-                                            ActivityResultContracts.PickVisualMedia.ImageOnly
+                                .throttledClickable(
+                                    coroutineScope = coroutineScope,
+                                    onClick = {
+                                        singlePhotoPickerLauncher.launch(
+                                            PickVisualMediaRequest(
+                                                ActivityResultContracts.PickVisualMedia.ImageOnly
+                                            )
                                         )
-                                    )
-                                },
+                                    }
+                                ),
                         ) {
                             Image(
                                 painter = painterResource(R.drawable.ic_camera),
@@ -262,7 +268,7 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
                                 viewModel.insertMenu()
                             }
                             navController.navigateUp()
-                        } else{
+                        } else {
                             Toast.makeText(
                                 context,
                                 context.getString(R.string.message_is_category_and_menu_name_blank),

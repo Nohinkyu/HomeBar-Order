@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -31,9 +32,11 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.devik.homebarorder.R
 import com.devik.homebarorder.data.source.local.database.PreferenceManager
+import com.devik.homebarorder.extension.throttledClickable
 import com.devik.homebarorder.ui.component.navigation.NavigationRoute
 import com.devik.homebarorder.util.Constants
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,15 +93,16 @@ fun DrawerNaviMenu(
                             if (selectedItem != index) {
                                 selectedItem = index
                                 scope.launch {
-                                    drawerState.close()
                                     navController.navigate(item.screenRoute)
+                                    drawerState.close()
                                 }
                             } else {
                                 scope.launch {
                                     drawerState.close()
                                 }
                             }
-                        })
+                        }
+                    )
                 }
             }
         },
