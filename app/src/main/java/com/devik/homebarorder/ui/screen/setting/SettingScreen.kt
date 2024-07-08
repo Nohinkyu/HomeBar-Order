@@ -55,7 +55,6 @@ fun SettingScreen(navController: NavController) {
         val isNoImageListChecked by viewModel.isNoImageListChecked.collectAsStateWithLifecycle()
         val signDialogState by viewModel.signOutDialogState.collectAsStateWithLifecycle()
         val isManageMode by viewModel.isManageMode.collectAsStateWithLifecycle()
-        var s = false
         val context = LocalContext.current
 
         LaunchedEffect(Unit) {
