@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.devik.homebarorder.R
 import com.devik.homebarorder.data.model.CartMenuItem
+import com.devik.homebarorder.extension.setImmersiveMode
 import com.devik.homebarorder.ui.theme.DarkGray
 import com.devik.homebarorder.ui.theme.LightGray
 import com.devik.homebarorder.ui.theme.OrangeSoda
@@ -53,6 +55,8 @@ fun OrderListDialog(
             usePlatformDefaultWidth = false
         )
     ) {
+        val view = LocalView.current
+        view.setImmersiveMode()
         Box(
             modifier = Modifier
                 .fillMaxWidth()

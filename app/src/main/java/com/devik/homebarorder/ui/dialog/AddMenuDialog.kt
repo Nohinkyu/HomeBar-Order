@@ -1,5 +1,7 @@
 package com.devik.homebarorder.ui.dialog
 
+import android.os.Build
+import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,11 +26,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,6 +43,7 @@ import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import com.devik.homebarorder.R
 import com.devik.homebarorder.data.source.local.database.MenuEntity
+import com.devik.homebarorder.extension.setImmersiveMode
 import com.devik.homebarorder.ui.theme.LightGray
 import com.devik.homebarorder.ui.theme.OrangeSoda
 import com.devik.homebarorder.util.TextFormatUtil
@@ -59,6 +64,8 @@ fun AddMenuDialog(
             usePlatformDefaultWidth = false
         )
     ) {
+        val view = LocalView.current
+        view.setImmersiveMode()
         Card(
             modifier = Modifier
                 .fillMaxWidth()
