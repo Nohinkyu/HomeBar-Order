@@ -30,6 +30,8 @@ class SettingViewModel @Inject constructor(
     private val _signOutDialogState = MutableStateFlow<Boolean>(false)
     val signOutDialogState: StateFlow<Boolean> = _signOutDialogState
 
+    private val _isManageMode = MutableStateFlow<Boolean>(preferenceManager.getBoolean(Constants.KEY_MANAGE_MODE, true))
+    val isManageMode:StateFlow<Boolean> = _isManageMode
     fun imageGridCheck() {
         preferenceManager.putString(Constants.KEY_MENU_LIST_STATE, Constants.IMAGE_GRID_STATE)
         _isImageGridChecked.value = true
@@ -80,6 +82,16 @@ class SettingViewModel @Inject constructor(
             supabseAuth.signOut()
             preferenceManager.removeString(Constants.KEY_MAIL_ADDRESS)
             preferenceManager.removeString(Constants.KEY_PROFILE_IMAGE)
+        }
+    }
+
+    fun changeManageMode() {
+        if(_isManageMode.value){
+            preferenceManager.putBoolean(Constants.KEY_MANAGE_MODE, false)
+            _isManageMode.value = false
+        }else{
+            preferenceManager.putBoolean(Constants.KEY_MANAGE_MODE, true)
+            _isManageMode.value = true
         }
     }
 }

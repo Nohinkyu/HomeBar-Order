@@ -23,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -32,11 +31,9 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.devik.homebarorder.R
 import com.devik.homebarorder.data.source.local.database.PreferenceManager
-import com.devik.homebarorder.extension.throttledClickable
 import com.devik.homebarorder.ui.component.navigation.NavigationRoute
 import com.devik.homebarorder.util.Constants
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,26 +44,42 @@ fun DrawerNaviMenu(
     scope: CoroutineScope,
     content: @Composable () -> Unit
 ) {
+    val preferenceManager = PreferenceManager(LocalContext.current)
+    val isManageMode = preferenceManager.getBoolean(Constants.KEY_MANAGE_MODE, true)
 
-    val drawerMenuItems = listOf<ScreenInfo>(
-        ScreenInfo(
-            stringResource(R.string.drawer_menu_screen_name_menu),
-            NavigationRoute.MENU_SCREEN
-        ),
-        ScreenInfo(
-            stringResource(R.string.drawer_menu_screen_name_manage_category),
-            NavigationRoute.MANAGE_CATEGORY_SCREEN
-        ),
-        ScreenInfo(
-            stringResource(R.string.drawer_menu_screen_name_manage_menu),
-            NavigationRoute.MANAGE_MENU_SCREEN
-        ),
-        ScreenInfo(
-            stringResource(R.string.drawer_menu_screen_name_setting),
-            NavigationRoute.SETTING_SCREEN
+    val drawerMenuItems = if(isManageMode) {
+        listOf<ScreenInfo>(
+            ScreenInfo(
+                stringResource(R.string.drawer_menu_screen_name_menu),
+                NavigationRoute.MENU_SCREEN
+            ),
+            ScreenInfo(
+                stringResource(R.string.drawer_menu_screen_name_manage_category),
+                NavigationRoute.MANAGE_CATEGORY_SCREEN
+            ),
+            ScreenInfo(
+                stringResource(R.string.drawer_menu_screen_name_manage_menu),
+                NavigationRoute.MANAGE_MENU_SCREEN
+            ),
+            ScreenInfo(
+                stringResource(R.string.drawer_menu_screen_name_setting),
+                NavigationRoute.SETTING_SCREEN
+            )
         )
+    } else {
+        listOf<ScreenInfo>(
+            ScreenInfo(
+                stringResource(R.string.drawer_menu_screen_name_menu),
+                NavigationRoute.MENU_SCREEN
+            ),
+            ScreenInfo(
+                stringResource(R.string.drawer_menu_screen_name_setting),
+                NavigationRoute.SETTING_SCREEN
+            )
+        )
+    }
 
-    )
+
     var selectedItem by rememberSaveable { mutableStateOf(0) }
     val gesturesEnabled = drawerState.currentValue == DrawerValue.Open
 

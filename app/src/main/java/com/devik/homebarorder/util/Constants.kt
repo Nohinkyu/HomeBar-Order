@@ -9,6 +9,8 @@ object Constants {
 
     const val KEY_FIRST_SIGN_IN = "first_sign_in"
 
+    const val KEY_MANAGE_MODE = "manage_mode"
+
     const val KEY_ORDER_NUMBER = "order_number"
 
     const val CATEGORY_DATABASE_NAME = "category_database"

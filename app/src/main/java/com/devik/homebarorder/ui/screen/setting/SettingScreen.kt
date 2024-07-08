@@ -16,6 +16,8 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -36,7 +38,9 @@ import com.devik.homebarorder.R
 import com.devik.homebarorder.ui.component.navigation.NavigationRoute
 import com.devik.homebarorder.ui.component.topappbar.BackIconWithTitleAppBar
 import com.devik.homebarorder.ui.dialog.YesOrNoDialog
+import com.devik.homebarorder.ui.theme.DarkGray
 import com.devik.homebarorder.ui.theme.LightGray
+import com.devik.homebarorder.ui.theme.MediumGray
 import com.devik.homebarorder.ui.theme.OrangeSoda
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,6 +54,8 @@ fun SettingScreen(navController: NavController) {
         val isImageListChecked by viewModel.isImageListChecked.collectAsStateWithLifecycle()
         val isNoImageListChecked by viewModel.isNoImageListChecked.collectAsStateWithLifecycle()
         val signDialogState by viewModel.signOutDialogState.collectAsStateWithLifecycle()
+        val isManageMode by viewModel.isManageMode.collectAsStateWithLifecycle()
+        var s = false
         val context = LocalContext.current
 
         LaunchedEffect(Unit) {
@@ -136,6 +142,34 @@ fun SettingScreen(navController: NavController) {
                             .fillMaxWidth()
                             .padding(16.dp),
                         fontSize = 24.sp
+                    )
+                }
+                Divider(thickness = 1.dp, color = LightGray)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = stringResource(R.string.setting_screen_text_manage_mode),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        fontSize = 24.sp
+                    )
+                    Switch(
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .padding(end = 16.dp),
+                        checked = isManageMode,
+                        onCheckedChange = {
+                            viewModel.changeManageMode()
+                        },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = LightGray,
+                            checkedTrackColor = OrangeSoda,
+                            uncheckedThumbColor = DarkGray,
+                            uncheckedTrackColor = MediumGray,
+                        )
                     )
                 }
                 Divider(thickness = 1.dp, color = LightGray)

@@ -35,7 +35,8 @@ fun ManualDialog(onDismissRequest: () -> Unit) {
         onDismissRequest = { onDismissRequest() },
         properties = DialogProperties(
             dismissOnBackPress = true,
-            dismissOnClickOutside = true
+            dismissOnClickOutside = true,
+            usePlatformDefaultWidth = false
         )
     ) {
         val view = LocalView.current
@@ -92,6 +93,10 @@ fun ManualDialog(onDismissRequest: () -> Unit) {
                 HeadRowText(
                     head = stringResource(id = R.string.dialog_message_manual_header_6),
                     body = stringResource(id = R.string.dialog_message_manual_body_6)
+                )
+                HeadRowText(
+                    head = stringResource(id = R.string.dialog_message_manual_header_7),
+                    body = stringResource(id = R.string.dialog_message_manual_body_7)
                 )
 
                 Button(
