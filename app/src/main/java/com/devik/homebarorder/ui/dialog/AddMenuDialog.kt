@@ -1,7 +1,5 @@
 package com.devik.homebarorder.ui.dialog
 
-import android.os.Build
-import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,11 +24,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -148,20 +146,20 @@ fun AddMenuDialog(
                                     )
                                 }
                                 Spacer(modifier = Modifier.width(64.dp))
-
-                                Text(
-                                    text = TextFormatUtil.priceTextFormat(
-                                        menuEntity.menuPrice * menuCount, stringResource(
-                                            R.string.price
-                                        )
-                                    ),
-                                    fontSize = 20.sp, color = OrangeSoda
-                                )
                             }
                             Spacer(modifier = Modifier.size(8.dp))
                             Divider(thickness = 2.dp, color = OrangeSoda)
                             Spacer(modifier = Modifier.size(16.dp))
-                            Text(text = menuEntity.menuInfo, fontSize = 16.sp)
+                            Text(text = menuEntity.menuInfo, fontSize = 16.sp, color = Gray)
+                            Spacer(modifier = Modifier.size(16.dp))
+                            Text(
+                                text = TextFormatUtil.priceTextFormat(
+                                    menuEntity.menuPrice * menuCount, stringResource(
+                                        R.string.price
+                                    )
+                                ),
+                                fontSize = 20.sp, color = OrangeSoda
+                            )
                         }
                     }
                 }
