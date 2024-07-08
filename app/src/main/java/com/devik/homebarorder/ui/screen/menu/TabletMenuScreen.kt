@@ -1,7 +1,6 @@
 package com.devik.homebarorder.ui.screen.menu
 
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,29 +12,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Close
-import com.devik.homebarorder.data.model.CartMenuItem
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
@@ -50,17 +40,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.devik.homebarorder.R
-import com.devik.homebarorder.data.source.local.database.CategoryEntity
 import com.devik.homebarorder.ui.component.drawermenu.DrawerNaviMenu
 import com.devik.homebarorder.ui.component.topappbar.MenuIconWithTitleAppBar
 import com.devik.homebarorder.ui.dialog.AddMenuDialog
@@ -78,7 +65,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuScreen(navController: NavController) {
+fun TabletMenuScreen(navController: NavController) {
 
     CompositionLocalProvider(
         androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current,
@@ -279,8 +266,7 @@ fun MenuScreen(navController: NavController) {
                                 .fillMaxWidth(0.5f)
                                 .align(Alignment.CenterStart)
                                 .clip(RoundedCornerShape(8.dp))
-                                .background(color = LightGray)
-                                .verticalScroll(rememberScrollState()),
+                                .background(color = LightGray),
                             verticalArrangement = Arrangement.SpaceBetween,
                         ) {
                             Row(
@@ -342,8 +328,7 @@ fun MenuScreen(navController: NavController) {
                                     .fillMaxWidth(0.3f)
                                     .clip(RoundedCornerShape(8.dp))
                                     .background(color = DarkGray)
-                                    .clickable { viewModel.clearCart() }
-                                    .verticalScroll(rememberScrollState()),
+                                    .clickable { viewModel.clearCart() },
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Icon(
@@ -398,151 +383,4 @@ fun MenuScreen(navController: NavController) {
             }
         }
     }
-}
-
-@Composable
-private fun CategoryItem(
-    category: CategoryEntity,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    val textColor = if (isSelected) {
-        Color.White
-    } else {
-        Color.Black
-    }
-
-    val boxColor = if (isSelected) {
-        OrangeSoda
-    } else {
-        Color.White
-    }
-
-    val borderColor = if (isSelected) {
-        OrangeSoda
-    } else {
-        Color.Black
-    }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .padding(8.dp)
-            .widthIn(min = 160.dp),
-        shape = RoundedCornerShape(60.dp),
-        border = BorderStroke(1.dp, color = borderColor),
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(boxColor)
-                .widthIn(min = 160.dp)
-                .clickable { onClick() },
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = category.category,
-                fontSize = 18.sp,
-                color = textColor,
-            )
-        }
-    }
-}
-
-@Composable
-private fun CartItem(
-    cartMenuItem: CartMenuItem,
-    onDeleteClick: () -> Unit,
-    onPlusClick: () -> Unit,
-    onMinusClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(64.dp)
-            .padding(end = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = cartMenuItem.menuName,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            fontSize = 18.sp,
-            modifier = Modifier.padding(start = 32.dp)
-        )
-        Text(
-            text = TextFormatUtil.priceTextFormat(
-                cartMenuItem.menuPrice * cartMenuItem.menuCount, stringResource(
-                    R.string.price
-                )
-            ),
-            color = OrangeSoda,
-            modifier = Modifier
-                .padding(end = 48.dp),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            fontSize = 18.sp
-        )
-
-        Row(
-            modifier = Modifier
-                .height(64.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = onMinusClick,
-                modifier = Modifier
-                    .size(48.dp)
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(color = LightGray),
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_minus),
-                    contentDescription = "",
-                    modifier = Modifier.fillMaxSize(),
-                    tint = Color.Black
-                )
-            }
-
-            Text(
-                text = cartMenuItem.menuCount.toString(),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                fontSize = 18.sp,
-                modifier = Modifier.padding(16.dp)
-            )
-
-            IconButton(
-                onClick = onPlusClick,
-                modifier = Modifier
-                    .size(48.dp)
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(color = LightGray),
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "",
-                    modifier = Modifier.fillMaxSize(),
-                    tint = Color.Black
-                )
-            }
-        }
-        IconButton(
-            onClick = onDeleteClick,
-            modifier = Modifier
-                .size(48.dp)
-                .clip(RoundedCornerShape(5.dp))
-                .background(color = OrangeSoda),
-        ) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = "",
-                modifier = Modifier.fillMaxSize(),
-                tint = Color.White
-            )
-        }
-    }
-    Divider(thickness = 1.dp, color = LightGray, modifier = Modifier.fillMaxWidth())
 }

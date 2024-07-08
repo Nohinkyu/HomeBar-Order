@@ -1,6 +1,7 @@
 package com.devik.homebarorder.ui.component.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -10,7 +11,8 @@ import androidx.navigation.navArgument
 import com.devik.homebarorder.data.source.local.database.PreferenceManager
 import com.devik.homebarorder.ui.screen.managecategory.ManageCategoryScreen
 import com.devik.homebarorder.ui.screen.managemenu.ManageMenuScreen
-import com.devik.homebarorder.ui.screen.menu.MenuScreen
+import com.devik.homebarorder.ui.screen.menu.TabletMenuScreen
+import com.devik.homebarorder.ui.screen.menu.MobileMenuScreen
 import com.devik.homebarorder.ui.screen.menueditorscreen.MenuEditorScreen
 import com.devik.homebarorder.ui.screen.setting.SettingScreen
 import com.devik.homebarorder.ui.screen.signin.SignInScreen
@@ -25,15 +27,22 @@ fun ScreenNavigation(navController: NavHostController) {
     val startDestination: String = if (userMail.isBlank() && userImage.isBlank()) {
         NavigationRoute.SIGN_IN_SCREEN
     } else {
-        NavigationRoute.MENU_SCREEN
+        if (isMobile()) {
+            NavigationRoute.MOBILE_MENU_SCREEN
+        } else {
+            NavigationRoute.MENU_SCREEN
+        }
     }
 
     NavHost(navController = navController, startDestination = startDestination) {
         composable(NavigationRoute.SIGN_IN_SCREEN) {
             SignInScreen(navController = navController)
         }
+        composable(NavigationRoute.MOBILE_MENU_SCREEN) {
+            MobileMenuScreen(navController = navController)
+        }
         composable(NavigationRoute.MENU_SCREEN) {
-            MenuScreen(navController = navController)
+            TabletMenuScreen(navController = navController)
         }
         composable(NavigationRoute.MANAGE_CATEGORY_SCREEN) {
             ManageCategoryScreen(navController = navController)
@@ -41,10 +50,10 @@ fun ScreenNavigation(navController: NavHostController) {
         composable(NavigationRoute.MANAGE_MENU_SCREEN) {
             ManageMenuScreen(navController = navController)
         }
-        composable(NavigationRoute.MENU_EDITOR_SCREEN){
+        composable(NavigationRoute.MENU_EDITOR_SCREEN) {
             MenuEditorScreen(navController = navController)
         }
-        composable(NavigationRoute.SETTING_SCREEN){
+        composable(NavigationRoute.SETTING_SCREEN) {
             SettingScreen(navController = navController)
         }
         composable(
@@ -59,6 +68,14 @@ fun ScreenNavigation(navController: NavHostController) {
     }
 }
 
+@Composable
+fun isMobile(): Boolean {
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp
+
+    return screenWidthDp <= 600
+}
+
 object NavigationRoute {
     const val SIGN_IN_SCREEN = "sign_in_screen"
     const val MENU_SCREEN = "menu_screen"
@@ -66,4 +83,5 @@ object NavigationRoute {
     const val MANAGE_MENU_SCREEN = "manage_menu_screen"
     const val MENU_EDITOR_SCREEN = "menu_editor_screen"
     const val SETTING_SCREEN = "setting_screen"
+    const val MOBILE_MENU_SCREEN = "mobile_menu_screen"
 }
