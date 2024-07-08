@@ -2,25 +2,35 @@ package com.devik.homebarorder.data.source.local
 
 import com.devik.homebarorder.data.source.local.database.CategoryDatabase
 import com.devik.homebarorder.data.source.local.database.CategoryEntity
+import com.devik.homebarorder.data.source.local.database.MenuDatabase
 import javax.inject.Inject
 
-class CategoryLocalDataSource @Inject constructor(private val database: CategoryDatabase) :
+class CategoryLocalDataSource @Inject constructor(
+    private val categoryDatabase: CategoryDatabase,
+    private val menuDatabase: MenuDatabase
+) :
     CategoryDataSource {
 
-    private val dao = database.categoryDao()
+    private val categoryDao = categoryDatabase.categoryDao()
+    private val menuDao = menuDatabase.menuDao()
+
     override suspend fun insertCategory(categoryEntity: CategoryEntity) {
-        dao.insertCategory(categoryEntity)
+        categoryDao.insertCategory(categoryEntity)
     }
 
     override suspend fun deleteCategory(categoryEntity: CategoryEntity) {
-        dao.deleteCategory(categoryEntity)
+        categoryDao.deleteCategory(categoryEntity)
     }
 
     override suspend fun getAllCategory(): List<CategoryEntity> {
-        return dao.getAllCategory()
+        return categoryDao.getAllCategory()
     }
 
     override suspend fun updateCategory(categoryEntity: CategoryEntity) {
-        dao.updateCategory(categoryEntity)
+        categoryDao.updateCategory(categoryEntity)
+    }
+
+    override suspend fun isCategoryExists(category: Int): Boolean {
+        return menuDao.isCategoryExists(category)
     }
 }

@@ -41,6 +41,8 @@
     <string name="order_dialog_all_price">상품금액</string>
     <string name="order_dialog_order">주문하기</string>
 
+    <string name="category_dialog_body">해당 카테고리로 등록한 메뉴가 존재하여 삭제할 수 없습니다.</string>
+    <string name="category_dialog_yes_button">확인</string>
 
     <string name="order_result_dialog_success_title">주문완료</string>
     <string name="order_result_dialog_success_body">주문이 완료 되었습니다.</string>

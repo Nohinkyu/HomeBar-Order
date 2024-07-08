@@ -47,6 +47,7 @@ import com.devik.homebarorder.R
 import com.devik.homebarorder.data.source.local.database.CategoryEntity
 import com.devik.homebarorder.ui.component.topappbar.BackIconWithTitleAppBar
 import com.devik.homebarorder.ui.dialog.EditCategoryDialog
+import com.devik.homebarorder.ui.dialog.YesButtonDialog
 import com.devik.homebarorder.ui.dialog.YesOrNoDialog
 import com.devik.homebarorder.ui.theme.LightGray
 
@@ -66,6 +67,8 @@ fun ManageCategoryScreen(navController: NavController) {
         val editCategoryDialogState by viewModel.editCategoryDialogState.collectAsStateWithLifecycle()
         val editTargetCategory by viewModel.editTargetCategory.collectAsStateWithLifecycle()
         val editTargetCategoryTextState by viewModel.editTargetCategoryTextState.collectAsStateWithLifecycle()
+        val isCategoryExists by viewModel.isCategoryExists.collectAsStateWithLifecycle()
+        val isCategoryExistsDialogState by viewModel.isCategoryExistsDialogState.collectAsStateWithLifecycle()
         viewModel.getAllCategoryList()
 
         Scaffold(
@@ -153,6 +156,7 @@ fun ManageCategoryScreen(navController: NavController) {
                         ItemCategory(
                             categoryEntity = item,
                             onDeleteClick = {
+                                viewModel.isCategoryExists(item.uid)
                                 viewModel.showDeleteDialog()
                                 viewModel.setDeleteTargetCategory(item)
                             },
@@ -172,10 +176,25 @@ fun ManageCategoryScreen(navController: NavController) {
                 onDismissRequest = { viewModel.closeDeleteDialog() },
                 onYesClickRequest = {
                     with(viewModel) {
-                        deleteCategory(deleteTargetCategory)
-                        closeDeleteDialog()
+                        if (isCategoryExists) {
+                            closeDeleteDialog()
+                            openIsCategoryExistsDialog()
+                        } else {
+                            deleteCategory(deleteTargetCategory)
+                            closeDeleteDialog()
+                        }
                     }
                 })
+        }
+        if (isCategoryExistsDialogState) {
+            YesButtonDialog(
+                body = stringResource(R.string.category_dialog_body),
+                yesButtonText = stringResource(R.string.category_dialog_yes_button),
+                onDismissRequest = { viewModel.closeIsCategoryExistsDialog() },
+                onYesClickRequest = {
+                    viewModel.closeIsCategoryExistsDialog()
+                }
+            )
         }
         if (editCategoryDialogState) {
             EditCategoryDialog(

@@ -21,4 +21,8 @@ class CategoryRepository @Inject constructor(private val categoryDataSource: Cat
     suspend fun updateCategory(categoryEntity: CategoryEntity) {
         categoryDataSource.updateCategory(categoryEntity)
     }
+
+    suspend fun isCategoryExists(category: Int): Boolean {
+        return categoryDataSource.isCategoryExists(category)
+    }
 }

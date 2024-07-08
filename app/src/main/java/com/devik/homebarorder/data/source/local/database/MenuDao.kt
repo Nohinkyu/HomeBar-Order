@@ -23,4 +23,7 @@ interface MenuDao {
 
     @Query("SELECT * FROM menu_list WHERE uid = :uid")
     suspend fun getMenu(uid: Int):MenuEntity
+
+    @Query("SELECT EXISTS(SELECT 1 FROM menu_list WHERE menuCategory = :category)")
+    suspend fun isCategoryExists(category: Int): Boolean
 }
