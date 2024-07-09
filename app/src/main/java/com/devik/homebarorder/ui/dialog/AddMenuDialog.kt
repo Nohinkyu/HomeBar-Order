@@ -107,7 +107,7 @@ fun AddMenuDialog(
                             ) {
                                 Text(text = menuEntity.menuName, fontSize = 18.sp)
 
-                                Spacer(modifier = Modifier.width(64.dp))
+                                Spacer(modifier = Modifier.width(24.dp))
 
                                 IconButton(
                                     onClick = onMinusClick,
