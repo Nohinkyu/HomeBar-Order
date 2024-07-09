@@ -51,7 +51,7 @@ fun DrawerNaviMenu(
         listOf<ScreenInfo>(
             ScreenInfo(
                 stringResource(R.string.drawer_menu_screen_name_menu),
-                NavigationRoute.MENU_SCREEN
+                NavigationRoute.TABLET_MENU_SCREEN
             ),
             ScreenInfo(
                 stringResource(R.string.drawer_menu_screen_name_manage_category),
@@ -70,7 +70,7 @@ fun DrawerNaviMenu(
         listOf<ScreenInfo>(
             ScreenInfo(
                 stringResource(R.string.drawer_menu_screen_name_menu),
-                NavigationRoute.MENU_SCREEN
+                NavigationRoute.TABLET_MENU_SCREEN
             ),
             ScreenInfo(
                 stringResource(R.string.drawer_menu_screen_name_setting),

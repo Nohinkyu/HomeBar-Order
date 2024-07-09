@@ -345,7 +345,7 @@ fun MobileMenuScreen(navController: NavController) {
                                     color = Color.White,
                                     modifier = Modifier
                                         .padding(bottom = 16.dp),
-                                    fontSize = 14.sp
+                                    fontSize = 12.sp
                                 )
                             }
                             Button(

@@ -1,7 +1,6 @@
 package com.devik.homebarorder.ui.component.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -17,6 +16,7 @@ import com.devik.homebarorder.ui.screen.menueditorscreen.MenuEditorScreen
 import com.devik.homebarorder.ui.screen.setting.SettingScreen
 import com.devik.homebarorder.ui.screen.signin.SignInScreen
 import com.devik.homebarorder.util.Constants
+import com.devik.homebarorder.util.isMobile
 
 @Composable
 fun ScreenNavigation(navController: NavHostController) {
@@ -30,7 +30,7 @@ fun ScreenNavigation(navController: NavHostController) {
         if (isMobile()) {
             NavigationRoute.MOBILE_MENU_SCREEN
         } else {
-            NavigationRoute.MENU_SCREEN
+            NavigationRoute.TABLET_MENU_SCREEN
         }
     }
 
@@ -41,7 +41,7 @@ fun ScreenNavigation(navController: NavHostController) {
         composable(NavigationRoute.MOBILE_MENU_SCREEN) {
             MobileMenuScreen(navController = navController)
         }
-        composable(NavigationRoute.MENU_SCREEN) {
+        composable(NavigationRoute.TABLET_MENU_SCREEN) {
             TabletMenuScreen(navController = navController)
         }
         composable(NavigationRoute.MANAGE_CATEGORY_SCREEN) {
@@ -68,17 +68,9 @@ fun ScreenNavigation(navController: NavHostController) {
     }
 }
 
-@Composable
-fun isMobile(): Boolean {
-    val configuration = LocalConfiguration.current
-    val screenWidthDp = configuration.screenWidthDp
-
-    return screenWidthDp <= 600
-}
-
 object NavigationRoute {
     const val SIGN_IN_SCREEN = "sign_in_screen"
-    const val MENU_SCREEN = "menu_screen"
+    const val TABLET_MENU_SCREEN = "menu_screen"
     const val MANAGE_CATEGORY_SCREEN = "manage_category_screen"
     const val MANAGE_MENU_SCREEN = "manage_menu_screen"
     const val MENU_EDITOR_SCREEN = "menu_editor_screen"
