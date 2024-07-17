@@ -1,0 +1,45 @@
+# 홈바오더, 홈바오더 매니저
+
+
+***
+홈바, 소규모 칵테일바에서 사용할 수 있는 주문하기, 주문내역 실시간 받기 기능을 제공하는 애플리케이션 입니다.
+
+- 원하는 메뉴를 등록하고 주문할 수 있습니다.
+- 홈바오더 매니저 애플리케이션에서 주문 내역을 실시간으로 받아볼 수 있습니다.
+- 그리드, 이미지 메뉴, 텍스트메뉴 총 3가지 형태의 메뉴판 형식을 제공합니다.
+
+
+# 기술 스택
+- Language: Kotlin
+- Architecture: MVVM
+- Asynchronous: Coroutines + Flow
+- JetPack: Compose, ViewModel, Navigation
+- Image: Coil
+- Local DB: Room
+- Supabase: Database, Auth
+- Dependency injection: Hilt
+
+
+
+# 홈바오더 주요 기능 소개
+
+   
+|로그인|메뉴얼|카테고리 등록|
+|---|---|---|
+|![로그인](https://github.com/user-attachments/assets/28473f40-de13-4dfa-8b9e-6ee4b9b153cb)|![메뉴얼](https://github.com/user-attachments/assets/97e9b921-6971-4c48-bb3d-b6908144038e)|![카테고리-등록](https://github.com/user-attachments/assets/d4a61c9e-8360-4ff1-8cf5-2faed304ef2c)|
+
+   
+|메뉴 등록|메뉴판|메뉴판 형식 변경|
+|---|---|---|
+|![메뉴 등록](https://github.com/user-attachments/assets/46a9ce48-fd2a-4081-8701-bf46ab4d49ed)|![메뉴판](https://github.com/user-attachments/assets/8a9139b1-579a-4eb7-8be2-d7772a852b1c)|![메뉴판 형식 변경](https://github.com/user-attachments/assets/0a595252-efde-470d-8b51-549732bcbaaf)|
+
+   
+|메뉴 담기|주문하기|
+|---|---|
+|![메뉴 담기](https://github.com/user-attachments/assets/98ead224-59ce-4e48-9db6-195e638c54af)|![주문하기](https://github.com/user-attachments/assets/184539c3-30db-4c95-8899-7a2e81100164)|
+
+
+
+
+
+
