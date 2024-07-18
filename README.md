@@ -38,8 +38,11 @@
 |---|---|
 |![메뉴 담기](https://github.com/user-attachments/assets/98ead224-59ce-4e48-9db6-195e638c54af)|![주문하기](https://github.com/user-attachments/assets/184539c3-30db-4c95-8899-7a2e81100164)|
 
+# 홈바오더 매니저 주요 기능 소개
 
 
-
+|실시간 주문내역 업데이트|주문내역 삭제|
+|---|---|
+|![실시간 주문내역 업데이트](https://github.com/user-attachments/assets/4ba5d5a3-18fe-4013-adb1-0255b158c7e0)|![주문내역 삭제](https://github.com/user-attachments/assets/5ba9bdb3-3c40-4843-afe9-ee0a70a5805f)|
 
 
