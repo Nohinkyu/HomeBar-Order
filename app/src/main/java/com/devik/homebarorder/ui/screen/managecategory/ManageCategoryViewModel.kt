@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.devik.homebarorder.data.repository.CategoryRepository
 import com.devik.homebarorder.data.source.local.database.CategoryEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -38,12 +39,6 @@ class ManageCategoryViewModel @Inject constructor(private val categoryRepository
         MutableStateFlow<String>("")
     val editTargetCategoryTextState: MutableStateFlow<String> = _editTargetCategoryTextState
 
-    private val _isCategoryExists = MutableStateFlow<Boolean>(false)
-    val isCategoryExists:StateFlow<Boolean> = _isCategoryExists
-
-    private val _isCategoryExistsDialogState = MutableStateFlow<Boolean>(false)
-    val isCategoryExistsDialogState:StateFlow<Boolean> = _isCategoryExistsDialogState
-
     fun getAllCategoryList() {
         viewModelScope.launch {
             _categoryList.value = categoryRepository.getAllCategory()
@@ -64,6 +59,7 @@ class ManageCategoryViewModel @Inject constructor(private val categoryRepository
 
     fun deleteCategory(categoryEntity: CategoryEntity) {
         viewModelScope.launch {
+            async { categoryRepository.deleteAllMenusInCategory(categoryEntity.uid) }.await()
             categoryRepository.deleteCategory(categoryEntity)
             getAllCategoryList()
         }
@@ -106,20 +102,5 @@ class ManageCategoryViewModel @Inject constructor(private val categoryRepository
 
     fun closeEditCategoryDialog() {
         _editCategoryDialogState.value = false
-    }
-
-    fun isCategoryExists(category: Int) {
-        viewModelScope.launch {
-            _isCategoryExists.value = categoryRepository.isCategoryExists(category)
-        }
-    }
-
-    fun closeIsCategoryExistsDialog() {
-        _isCategoryExistsDialogState.value = false
-        _isCategoryExists.value = false
-    }
-
-    fun openIsCategoryExistsDialog() {
-        _isCategoryExistsDialogState.value = true
     }
 }

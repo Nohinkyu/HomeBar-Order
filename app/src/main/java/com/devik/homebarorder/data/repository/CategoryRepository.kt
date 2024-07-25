@@ -22,7 +22,7 @@ class CategoryRepository @Inject constructor(private val categoryDataSource: Cat
         categoryDataSource.updateCategory(categoryEntity)
     }
 
-    suspend fun isCategoryExists(category: Int): Boolean {
-        return categoryDataSource.isCategoryExists(category)
+    suspend fun deleteAllMenusInCategory(category: Int) {
+        categoryDataSource.deleteAllMenusInCategory(category)
     }
 }

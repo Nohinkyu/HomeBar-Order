@@ -27,7 +27,7 @@
     <string name="dialog_message_manual_body_7">다른 사용자가 메뉴 정보를 수정하지 못하도록 설정에서 관리자 모드를 비활성화 할 수 있습니다.</string>
     <string name="dialog_button_manual_start">HomeBar Order 시작하기</string>
     <string name="dialog_message_category_delete_body">"""카테고리를 삭제하시겠습니까?
-                        | 해당 카테고리로 등록한 메뉴가 있는 경우 삭제할 수 없습니다."""</string>
+                        | 해당 카테고리로 등록한 모든 메뉴가 삭제됩니다."""</string>
     <string name="dialog_button_cancel">취소</string>
     <string name="dialog_button_delete">삭제</string>
     <string name="dialog_button_save">저장</string>
@@ -87,7 +87,7 @@
     <string name="menu_item_all_category">전체</string>
 
     <string name="top_appbar_title_category">Category</string>
-    <string name="top_appbar_title_menu">Menu</string>
+    <string name="top_appbar_title_menu">Manage Menu</string>
     <string name="top_appbar_title_edit_add_menu">메뉴추가, 수정</string>
     <string name="top_appbsr_title_setting">Setting</string>
 

@@ -33,4 +33,8 @@ class CategoryLocalDataSource @Inject constructor(
     override suspend fun isCategoryExists(category: Int): Boolean {
         return menuDao.isCategoryExists(category)
     }
+
+    override suspend fun deleteAllMenusInCategory(category: Int) {
+        menuDao.removeAllMenusInCategory(category)
+    }
 }

@@ -26,4 +26,7 @@ interface MenuDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM menu_list WHERE menuCategory = :category)")
     suspend fun isCategoryExists(category: Int): Boolean
+
+    @Query("DELETE FROM menu_list WHERE menuCategory = :category")
+    suspend fun removeAllMenusInCategory(category: Int)
 }
