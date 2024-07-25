@@ -111,7 +111,9 @@ fun AddMenuDialog(
                                     fontSize = 18.sp,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier.widthIn(max = 180.dp)
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .weight(1f)
                                 )
 
                                 Spacer(modifier = Modifier.width(24.dp))
@@ -152,7 +154,7 @@ fun AddMenuDialog(
                                         tint = Color.Black
                                     )
                                 }
-                                Spacer(modifier = Modifier.width(64.dp))
+                                Spacer(modifier = Modifier.width(16.dp))
                             }
                             Spacer(modifier = Modifier.size(8.dp))
                             Divider(thickness = 2.dp, color = OrangeSoda)
@@ -163,7 +165,9 @@ fun AddMenuDialog(
                                 color = Gray,
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.fillMaxWidth().padding(end = 40.dp)
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(end = 40.dp)
                             )
                             Spacer(modifier = Modifier.size(16.dp))
                             Text(
