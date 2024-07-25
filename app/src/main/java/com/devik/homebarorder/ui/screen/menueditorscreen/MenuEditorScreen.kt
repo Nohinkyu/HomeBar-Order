@@ -12,7 +12,6 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -65,6 +64,8 @@ import coil.compose.AsyncImage
 import com.devik.homebarorder.R
 import com.devik.homebarorder.extension.throttledClickable
 import com.devik.homebarorder.ui.component.topappbar.BackIconWithTitleAppBar
+import com.devik.homebarorder.ui.dialog.MenuSaveSuccessDialog
+import com.devik.homebarorder.ui.dialog.OrderInProgressDialog
 import com.devik.homebarorder.ui.theme.LightGray
 import com.devik.homebarorder.ui.theme.MediumGray
 import com.devik.homebarorder.ui.theme.OrangeSoda
@@ -88,6 +89,8 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
         val menuImageBitmap by viewModel.menuImageBitmap.collectAsStateWithLifecycle()
         val isMenuNameCategoryBlank by viewModel.isMenuNameCategoryBlank.collectAsStateWithLifecycle()
         val buttonTextState by viewModel.buttonTextState.collectAsStateWithLifecycle()
+        val isSavingState by viewModel.isSavingState.collectAsStateWithLifecycle()
+        val isSavingSuccess by viewModel.isSavingSuccess.collectAsStateWithLifecycle()
         var expandStatus by remember { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
@@ -106,6 +109,40 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
                 }
             }
         )
+
+        if (isSavingState) {
+            OrderInProgressDialog(stringResource(R.string.menu_save_in_progress_message))
+        }
+
+        if (isSavingSuccess && editTargetMenuUid == null) {
+            MenuSaveSuccessDialog(
+                body = stringResource(R.string.menu_save_success_dialog_body),
+                yesButtonText = stringResource(R.string.menu_save_success_dialog_yes_button),
+                onDismissRequest = { viewModel.closeSuccessDialog() },
+                onYesClickRequest = {
+                    viewModel.closeSuccessDialog()
+                    viewModel.clearMenuInfo()
+                },
+                onCancelClick = {
+                    viewModel.closeSuccessDialog()
+                    navController.navigateUp()
+                })
+        }
+
+        if (isSavingSuccess && editTargetMenuUid != null) {
+            MenuSaveSuccessDialog(
+                body = stringResource(R.string.menu_edit_success_dialog_body),
+                yesButtonText = stringResource(R.string.menu_edit_success_dialog_yes_button),
+                onDismissRequest = { viewModel.closeSuccessDialog() },
+                onYesClickRequest = {
+                    viewModel.closeSuccessDialog()
+                    navController.navigateUp()
+                },
+                onCancelClick = {
+                    viewModel.closeSuccessDialog()
+                    navController.navigateUp()
+                })
+        }
 
         Scaffold(
             topBar = {
@@ -185,9 +222,17 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
 
                             MenuEditTextFiled(
                                 textValue = menuInfo,
-                                onValueChange = { viewModel.setMenuInfo(it) },
-                                maxLines = 4,
-                                placeholder = stringResource(R.string.placeholder_menu_info)
+                                onValueChange = {
+                                    val lines = it.split("\n")
+                                    if (lines.size <= 2) {
+                                        viewModel.setMenuInfo(it)
+                                    } else {
+                                        val truncatedText = lines.take(2).joinToString("\n")
+                                        viewModel.setMenuInfo(truncatedText)
+                                    }
+                                },
+                                maxLines = 2,
+                                placeholder = stringResource(R.string.placeholder_menu_info),
                             )
 
                             Button(
@@ -267,7 +312,6 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
                             } else {
                                 viewModel.insertMenu()
                             }
-                            navController.navigateUp()
                         } else {
                             Toast.makeText(
                                 context,
@@ -329,5 +373,5 @@ private fun setImageBitmap(context: Context, uri: Uri): Bitmap {
     } else {
         MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
     }
-    return bitmap
+    return Bitmap.createScaledBitmap(bitmap, bitmap.width / 4, bitmap.height / 4, true)
 }

@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -57,7 +58,6 @@ fun ImageColumnMenuItem(
     menu: MenuEntity,
     onClick: () -> Unit
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -97,22 +97,29 @@ fun ImageColumnMenuItem(
                     Spacer(modifier = Modifier.size(16.dp))
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth(0.6f)
+                            .fillMaxWidth()
                             .height(144.dp)
                             .background(color = Color.White)
                     ) {
                         Text(
-                            text = menu.menuName, modifier = Modifier
+                            text = menu.menuName,
+                            modifier = Modifier
                                 .align(Alignment.TopStart)
-                                .padding(top = 8.dp),
-                            fontSize = 20.sp
+                                .padding(top = 8.dp, end = 24.dp)
+                                .fillMaxWidth(),
+                            fontSize = 20.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Text(
                             text = menu.menuInfo, modifier = Modifier
                                 .align(Alignment.TopStart)
-                                .padding(top = 48.dp),
+                                .padding(top = 48.dp, end = 24.dp)
+                                .fillMaxWidth(),
                             fontSize = 16.sp,
-                            color = Color.Gray
+                            color = Color.Gray,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Text(
                             text = TextFormatUtil.priceTextFormat(
@@ -124,7 +131,9 @@ fun ImageColumnMenuItem(
                                 .align(Alignment.BottomStart)
                                 .padding(bottom = 8.dp),
                             fontSize = 18.sp,
-                            color = OrangeSoda
+                            color = OrangeSoda,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
                 }

@@ -132,7 +132,7 @@ fun MobileMenuScreen(navController: NavController) {
         }
 
         if (isOrderInProgress) {
-            OrderInProgressDialog()
+            OrderInProgressDialog(stringResource(R.string.order_in_progress_dialog_body))
         }
 
         if (isOrderSuccess) {

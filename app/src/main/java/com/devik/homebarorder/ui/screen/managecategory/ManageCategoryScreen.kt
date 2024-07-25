@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -35,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -109,6 +111,21 @@ fun ManageCategoryScreen(navController: NavController) {
                         unfocusedBorderColor = Color.Black,
                         focusedBorderColor = Color.Black
                     ),
+                    keyboardActions = KeyboardActions {
+                        if (categoryTextState.isEmpty()) {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.message_is_category_blank),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            viewModel.insertCategory(
+                                CategoryEntity(
+                                    category = categoryTextState,
+                                )
+                            )
+                        }
+                    },
                     singleLine = true,
                     textStyle = TextStyle(fontSize = 20.sp),
                     trailingIcon = {

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -34,6 +35,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +51,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -82,8 +85,10 @@ fun ManageMenuScreen(navController: NavController) {
         val searchAppBarState by viewModel.searchAppBarState.collectAsStateWithLifecycle()
         val searchTextState by viewModel.searchTextState.collectAsStateWithLifecycle()
 
-        viewModel.getAllCategoryList()
-        viewModel.getAllMenuList()
+        LaunchedEffect(Unit) {
+            viewModel.getAllCategoryList()
+            viewModel.getAllMenuList()
+        }
 
         Scaffold(
             topBar = {
@@ -208,6 +213,7 @@ private fun CategoryItem(
         .height(48.dp)
         .clickable(onClick = onClick)
         .background(color = Color.White)
+        .widthIn(min = 80.dp, max = 160.dp)
         .then(
             if (isSelected) Modifier.drawBehind {
                 val borderStroke = 2.dp.toPx()
@@ -230,9 +236,12 @@ private fun CategoryItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.Center)
+                .widthIn(min = 80.dp, max = 160.dp)
                 .padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 12.dp),
             textAlign = TextAlign.Center,
             fontSize = 16.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -279,7 +288,6 @@ private fun MenuItem(
     onEditClick: () -> Unit,
     modifier: Modifier
 ) {
-    val imageBitmap by remember { mutableStateOf(menuEntity.menuImage) }
     var expandStatus by remember { mutableStateOf(false) }
 
     Column(modifier = modifier) {
@@ -306,7 +314,7 @@ private fun MenuItem(
                         .align(Alignment.CenterStart)
                 ) {
                     AsyncImage(
-                        model = imageBitmap,
+                        model = menuEntity.menuImage,
                         contentDescription = stringResource(R.string.content_description_menu_image),
                         modifier = Modifier
                             .size(height = 144.dp, width = 115.dp)
@@ -324,15 +332,21 @@ private fun MenuItem(
                         Text(
                             text = menuEntity.menuName, modifier = Modifier
                                 .align(Alignment.TopStart)
-                                .padding(top = 8.dp),
-                            fontSize = 18.sp
+                                .padding(top = 8.dp)
+                                .widthIn(max = 136.dp),
+                            fontSize = 18.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Text(
                             text = menuEntity.menuInfo, modifier = Modifier
                                 .align(Alignment.TopStart)
-                                .padding(top = 48.dp),
+                                .padding(top = 48.dp, end = 48.dp)
+                                .fillMaxWidth(),
                             fontSize = 14.sp,
-                            color = Gray
+                            color = Gray,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Text(
                             text = TextFormatUtil.priceTextFormat(

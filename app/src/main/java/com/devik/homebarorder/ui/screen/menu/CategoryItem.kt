@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devik.homebarorder.data.source.local.database.CategoryEntity
@@ -49,7 +50,7 @@ fun CategoryItem(
             .fillMaxWidth()
             .height(56.dp)
             .padding(8.dp)
-            .widthIn(min = 160.dp),
+            .widthIn(min = 160.dp , max = 180.dp),
         shape = RoundedCornerShape(60.dp),
         border = BorderStroke(1.dp, color = borderColor),
     ) {
@@ -57,7 +58,7 @@ fun CategoryItem(
             modifier = Modifier
                 .fillMaxSize()
                 .background(boxColor)
-                .widthIn(min = 160.dp)
+                .widthIn(min = 160.dp , max = 180.dp)
                 .clickable { onClick() },
             contentAlignment = Alignment.Center
         ) {
@@ -65,6 +66,9 @@ fun CategoryItem(
                 text = category.category,
                 fontSize = 18.sp,
                 color = textColor,
+                modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

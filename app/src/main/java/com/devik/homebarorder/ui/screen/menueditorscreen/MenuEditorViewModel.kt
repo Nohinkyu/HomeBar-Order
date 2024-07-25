@@ -10,6 +10,7 @@ import com.devik.homebarorder.data.source.local.database.CategoryEntity
 import com.devik.homebarorder.data.source.local.database.MenuEntity
 import com.devik.homebarorder.di.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -34,7 +35,8 @@ class MenuEditorViewModel @Inject constructor(
     private val _menuInfo = MutableStateFlow<String>("")
     val menuInfo: StateFlow<String> = _menuInfo
 
-    private val _menuCategory = MutableStateFlow<CategoryEntity>(CategoryEntity(category = resourceProvider.getString(R.string.button_category)))
+    private val _menuCategory =
+        MutableStateFlow<CategoryEntity>(CategoryEntity(category = resourceProvider.getString(R.string.button_category)))
     val menuCategory: StateFlow<CategoryEntity> = _menuCategory
 
     private val _menuImageBitmap = MutableStateFlow<Bitmap?>(null)
@@ -45,6 +47,12 @@ class MenuEditorViewModel @Inject constructor(
 
     private val _buttonTextState = MutableStateFlow<String>("")
     val buttonTextState: StateFlow<String> = _buttonTextState
+
+    private val _isSavingState = MutableStateFlow<Boolean>(false)
+    val isSavingState:StateFlow<Boolean> = _isSavingState
+
+    private val _isSavingSuccess = MutableStateFlow<Boolean>(false)
+    val isSavingSuccess:StateFlow<Boolean> = _isSavingSuccess
 
     private val _editTargetMenuUid = MutableStateFlow<Int>(0)
 
@@ -86,8 +94,8 @@ class MenuEditorViewModel @Inject constructor(
         }
     }
 
-    fun checkMenuNameCategoryBlank():Boolean {
-         return _menuName.value.isNotBlank() && _categoryList.value.contains(_menuCategory.value)
+    fun checkMenuNameCategoryBlank(): Boolean {
+        return _menuName.value.isNotBlank() && _categoryList.value.contains(_menuCategory.value)
     }
 
     fun getEditTargetMenu(uid: Int) {
@@ -118,9 +126,12 @@ class MenuEditorViewModel @Inject constructor(
                     menuInfo = _menuInfo.value,
                     menuPrice = menuPrice,
                     menuCategory = _menuCategory.value.uid,
-                    menuImage = menuImageBitmap.value
+                    menuImage = _menuImageBitmap.value
                 )
-                menuRepository.insertMenu(menu)
+                _isSavingState.value = true
+                async { menuRepository.insertMenu(menu) }.await()
+                _isSavingState.value = false
+                _isSavingSuccess. value = true
             } else {
                 _isMenuNameCategoryBlank.value = true
             }
@@ -141,12 +152,26 @@ class MenuEditorViewModel @Inject constructor(
                     menuInfo = _menuInfo.value,
                     menuPrice = menuPrice,
                     menuCategory = _menuCategory.value.uid,
-                    menuImage = menuImageBitmap.value
+                    menuImage = _menuImageBitmap.value
                 )
-                menuRepository.updateMenu(menu)
+                _isSavingState.value = true
+                async {menuRepository.updateMenu(menu)}.await()
+                _isSavingState.value = false
+                _isSavingSuccess. value = true
             } else {
                 _isMenuNameCategoryBlank.value = true
             }
         }
+    }
+
+    fun closeSuccessDialog() {
+        _isSavingSuccess.value = false
+    }
+
+    fun clearMenuInfo() {
+        _menuName.value = ""
+        _menuInfo.value = ""
+        _menuPrice.value = ""
+        _menuImageBitmap.value = null
     }
 }

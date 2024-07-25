@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -105,7 +106,13 @@ fun AddMenuDialog(
                                     .fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(text = menuEntity.menuName, fontSize = 18.sp)
+                                Text(
+                                    text = menuEntity.menuName,
+                                    fontSize = 18.sp,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.widthIn(max = 180.dp)
+                                )
 
                                 Spacer(modifier = Modifier.width(24.dp))
 
@@ -150,7 +157,14 @@ fun AddMenuDialog(
                             Spacer(modifier = Modifier.size(8.dp))
                             Divider(thickness = 2.dp, color = OrangeSoda)
                             Spacer(modifier = Modifier.size(16.dp))
-                            Text(text = menuEntity.menuInfo, fontSize = 16.sp, color = Gray)
+                            Text(
+                                text = menuEntity.menuInfo,
+                                fontSize = 16.sp,
+                                color = Gray,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.fillMaxWidth().padding(end = 40.dp)
+                            )
                             Spacer(modifier = Modifier.size(16.dp))
                             Text(
                                 text = TextFormatUtil.priceTextFormat(

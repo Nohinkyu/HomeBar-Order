@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -132,7 +133,7 @@ fun TabletMenuScreen(navController: NavController) {
         }
 
         if (isOrderInProgress) {
-            OrderInProgressDialog()
+            OrderInProgressDialog(stringResource(R.string.order_in_progress_dialog_body))
         }
 
         if (isOrderSuccess) {
@@ -191,7 +192,7 @@ fun TabletMenuScreen(navController: NavController) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(0.7f)
+                            .weight(1f)
                             .padding(16.dp)
                             .clip(RoundedCornerShape(8.dp))
                             .background(color = LightGray),
@@ -229,7 +230,7 @@ fun TabletMenuScreen(navController: NavController) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(0.65f)
+                            .height(256.dp)
                             .background(Color.White)
                             .padding(16.dp)
                     ) {
@@ -257,7 +258,8 @@ fun TabletMenuScreen(navController: NavController) {
 
                     Box(
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxWidth()
+                            .height(136.dp)
                             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                     ) {
                         Column(
@@ -267,7 +269,7 @@ fun TabletMenuScreen(navController: NavController) {
                                 .align(Alignment.CenterStart)
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(color = LightGray),
-                            verticalArrangement = Arrangement.SpaceBetween,
+                            verticalArrangement = Arrangement.Center,
                         ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -277,21 +279,23 @@ fun TabletMenuScreen(navController: NavController) {
                                     text = stringResource(R.string.menu_screen_text_all_menu_count),
                                     modifier = Modifier
                                         .padding(top = 16.dp, start = 16.dp),
-                                    fontSize = 20.sp
+                                    fontSize = 18.sp
                                 )
                                 Text(
                                     text = "$allCartCount ${stringResource(R.string.menu_screen_text_menu_count)}",
                                     modifier = Modifier
                                         .padding(top = 16.dp, end = 16.dp),
-                                    fontSize = 20.sp
+                                    fontSize = 18.sp
                                 )
                             }
+                            Spacer(modifier = Modifier.size(4.dp))
                             Divider(
                                 thickness = 2.dp,
                                 modifier = Modifier
                                     .padding(8.dp),
                                 color = MediumGray
                             )
+                            Spacer(modifier = Modifier.size(4.dp))
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
@@ -300,7 +304,7 @@ fun TabletMenuScreen(navController: NavController) {
                                     text = stringResource(R.string.menu_screen_text_all_price),
                                     modifier = Modifier
                                         .padding(bottom = 16.dp, start = 16.dp),
-                                    fontSize = 20.sp
+                                    fontSize = 18.sp
                                 )
                                 Text(
                                     text = TextFormatUtil.priceTextFormat(
@@ -309,7 +313,7 @@ fun TabletMenuScreen(navController: NavController) {
                                     ),
                                     modifier = Modifier
                                         .padding(bottom = 16.dp, end = 16.dp),
-                                    fontSize = 20.sp,
+                                    fontSize = 18.sp,
                                     color = OrangeSoda
                                 )
                             }
@@ -321,7 +325,6 @@ fun TabletMenuScreen(navController: NavController) {
                                 .align(Alignment.CenterEnd)
                                 .padding(start = 16.dp)
                         ) {
-
                             Column(
                                 modifier = Modifier
                                     .fillMaxHeight()
@@ -371,7 +374,7 @@ fun TabletMenuScreen(navController: NavController) {
                             ) {
                                 Text(
                                     text = stringResource(R.string.menu_screen_button_text_order),
-                                    fontSize = 24.sp,
+                                    fontSize = 20.sp,
                                     modifier = Modifier.fillMaxWidth(),
                                     maxLines = 1,
                                     textAlign = TextAlign.Center

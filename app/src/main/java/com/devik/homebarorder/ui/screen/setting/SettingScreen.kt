@@ -196,7 +196,8 @@ private fun ListFormatCheckbox(
             modifier = Modifier.size(40.dp)
         )
         Checkbox(
-            checked = checked, onCheckedChange = { onClick() }, colors = CheckboxDefaults.colors(
+            checked = checked, onCheckedChange = { onClick() },
+            colors = CheckboxDefaults.colors(
                 checkedColor = OrangeSoda
             )
         )

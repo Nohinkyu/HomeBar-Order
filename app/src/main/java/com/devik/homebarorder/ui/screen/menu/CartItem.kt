@@ -54,21 +54,8 @@ fun CartItem(
             text = cartMenuItem.menuName,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            fontSize = 18.sp,
-            modifier = Modifier.padding(start = 32.dp)
-        )
-        Text(
-            text = TextFormatUtil.priceTextFormat(
-                cartMenuItem.menuPrice * cartMenuItem.menuCount, stringResource(
-                    R.string.price
-                )
-            ),
-            color = OrangeSoda,
-            modifier = Modifier
-                .padding(end = 48.dp),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            fontSize = 18.sp
+            fontSize = 16.sp,
+            modifier = Modifier.padding(start = 16.dp).width(144.dp)
         )
 
         Row(
@@ -76,6 +63,23 @@ fun CartItem(
                 .height(64.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+
+            Text(
+                text = TextFormatUtil.priceTextFormat(
+                    cartMenuItem.menuPrice * cartMenuItem.menuCount, stringResource(
+                        R.string.price
+                    )
+                ),
+                color = OrangeSoda,
+                modifier = Modifier
+                    .padding(end = 24.dp)
+                    .width(120.dp),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                fontSize = 16.sp,
+                textAlign = TextAlign.End
+            )
+
             IconButton(
                 onClick = onMinusClick,
                 modifier = Modifier
@@ -95,7 +99,7 @@ fun CartItem(
                 text = cartMenuItem.menuCount.toString(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                fontSize = 18.sp,
+                fontSize = 16.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(16.dp)
