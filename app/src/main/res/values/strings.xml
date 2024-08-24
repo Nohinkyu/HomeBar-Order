@@ -78,6 +78,7 @@
 
     <string name="price">원</string>
     <string name="count">개</string>
+    <string name="order_number">주문번호</string>
 
     <string name="menu_item_all_category">전체</string>
 

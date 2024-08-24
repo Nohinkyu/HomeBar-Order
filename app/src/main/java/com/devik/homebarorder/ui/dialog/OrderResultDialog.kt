@@ -28,8 +28,16 @@ import com.devik.homebarorder.ui.theme.OrangeSoda
 fun OrderResultDialog(
     onDismissRequest: () -> Unit,
     resultMessageTitle: String,
-    resultMessageBody: String
+    resultMessageBody: String,
+    orderNumber: Int? = null
 ) {
+
+    val orderNumberState = if (orderNumber != null) {
+        "${stringResource(R.string.order_number)} $orderNumber"
+    } else {
+        stringResource(R.string.order_result_dialog_button_close)
+    }
+
     Dialog(onDismissRequest = onDismissRequest) {
         Column(
             modifier = Modifier
@@ -51,6 +59,8 @@ fun OrderResultDialog(
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.size(18.dp))
+
+            Spacer(modifier = Modifier.size(18.dp))
             Button(
                 onClick = onDismissRequest,
                 modifier = Modifier
@@ -60,7 +70,7 @@ fun OrderResultDialog(
                 shape = RoundedCornerShape(5.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.order_result_dialog_button_close),
+                    text = orderNumberState,
                     fontSize = 24.sp
                 )
             }

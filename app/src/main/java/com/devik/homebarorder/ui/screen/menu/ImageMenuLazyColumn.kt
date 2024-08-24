@@ -108,7 +108,7 @@ fun ImageColumnMenuItem(
                             fontSize = 20.sp
                         )
                         Text(
-                            text = menu.menuInto, modifier = Modifier
+                            text = menu.menuInfo, modifier = Modifier
                                 .align(Alignment.TopStart)
                                 .padding(top = 48.dp),
                             fontSize = 16.sp,

@@ -94,7 +94,7 @@ class MenuEditorViewModel @Inject constructor(
         viewModelScope.launch {
             val editTarget = menuRepository.getEditTargetMenu(uid)
             _menuName.value = editTarget.menuName
-            _menuInfo.value = editTarget.menuInto
+            _menuInfo.value = editTarget.menuInfo
             _menuPrice.value = editTarget.menuPrice.toString()
             _menuImageBitmap.value = editTarget.menuImage
             _editTargetMenuUid.value = editTarget.uid
@@ -115,7 +115,7 @@ class MenuEditorViewModel @Inject constructor(
             if (_menuName.value.isNotBlank() && _categoryList.value.contains(_menuCategory.value)) {
                 val menu = MenuEntity(
                     menuName = _menuName.value,
-                    menuInto = _menuInfo.value,
+                    menuInfo = _menuInfo.value,
                     menuPrice = menuPrice,
                     menuCategory = _menuCategory.value.uid,
                     menuImage = menuImageBitmap.value
@@ -138,7 +138,7 @@ class MenuEditorViewModel @Inject constructor(
                 val menu = MenuEntity(
                     uid = _editTargetMenuUid.value,
                     menuName = _menuName.value,
-                    menuInto = _menuInfo.value,
+                    menuInfo = _menuInfo.value,
                     menuPrice = menuPrice,
                     menuCategory = _menuCategory.value.uid,
                     menuImage = menuImageBitmap.value

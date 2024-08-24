@@ -102,6 +102,7 @@ fun MenuScreen(navController: NavController) {
         val isOrderSuccess by viewModel.isOrderSuccess.collectAsStateWithLifecycle()
         val isOrderFail by viewModel.isOrderFail.collectAsStateWithLifecycle()
         val menuListFormatState by viewModel.menuListFormatState.collectAsStateWithLifecycle()
+        val orderNumberState by viewModel.orderNumberState.collectAsStateWithLifecycle()
 
         val scope = rememberCoroutineScope()
 
@@ -151,7 +152,8 @@ fun MenuScreen(navController: NavController) {
             OrderResultDialog(
                 onDismissRequest = { viewModel.closeOrderSuccessDialog() },
                 resultMessageTitle = stringResource(R.string.order_result_dialog_success_title),
-                resultMessageBody = stringResource(R.string.order_result_dialog_success_body)
+                resultMessageBody = stringResource(R.string.order_result_dialog_success_body),
+                orderNumber = orderNumberState
             )
         }
 
@@ -214,18 +216,21 @@ fun MenuScreen(navController: NavController) {
                                     onMenuClick = { viewModel.openAddCartDialog(it) }
                                 )
                             }
+
                             Constants.IMAGE_LIST_STATE -> {
                                 ImageMenuLazyColumn(
                                     menuList = selectedCategoryMenu,
                                     onMenuClick = { viewModel.openAddCartDialog(it) }
                                 )
                             }
+
                             Constants.NO_IMAGE_LIST_STATE -> {
                                 ImageLessMenuLazyColumn(
                                     menuList = selectedCategoryMenu,
-                                    onMenuClick = { viewModel.openAddCartDialog(it)}
+                                    onMenuClick = { viewModel.openAddCartDialog(it) }
                                 )
                             }
+
                             else -> {
                                 GridMenuLazyVerticalGrid(
                                     menuList = selectedCategoryMenu,

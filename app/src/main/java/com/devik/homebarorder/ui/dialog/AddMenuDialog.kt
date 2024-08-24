@@ -154,7 +154,7 @@ fun AddMenuDialog(
                             Spacer(modifier = Modifier.size(8.dp))
                             Divider(thickness = 2.dp, color = OrangeSoda)
                             Spacer(modifier = Modifier.size(16.dp))
-                            Text(text = menuEntity.menuInto, fontSize = 16.sp)
+                            Text(text = menuEntity.menuInfo, fontSize = 16.sp)
                         }
                     }
                 }
