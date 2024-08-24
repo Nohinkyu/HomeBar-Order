@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -30,6 +31,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,7 +48,7 @@ import androidx.navigation.NavController
 import com.devik.homebarorder.R
 import com.devik.homebarorder.data.source.local.database.CategoryEntity
 import com.devik.homebarorder.ui.component.topappbar.BackIconWithTitleAppBar
-import com.devik.homebarorder.ui.dialog.EditCategoryDialog
+import com.devik.homebarorder.ui.dialog.EditTextDialog
 import com.devik.homebarorder.ui.dialog.YesOrNoDialog
 import com.devik.homebarorder.ui.theme.LightGray
 
@@ -72,7 +74,7 @@ fun ManageCategoryScreen(navController: NavController) {
             topBar = {
                 BackIconWithTitleAppBar(
                     title = stringResource(R.string.top_appbar_title_category),
-                    navController = navController
+                    onBackIconClick = { navController.navigateUp() }
                 )
             },
             modifier = Modifier.padding(8.dp)
@@ -106,6 +108,21 @@ fun ManageCategoryScreen(navController: NavController) {
                         unfocusedBorderColor = Color.Black,
                         focusedBorderColor = Color.Black
                     ),
+                    keyboardActions = KeyboardActions {
+                        if (categoryTextState.isEmpty()) {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.message_is_category_blank),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            viewModel.insertCategory(
+                                CategoryEntity(
+                                    category = categoryTextState,
+                                )
+                            )
+                        }
+                    },
                     singleLine = true,
                     textStyle = TextStyle(fontSize = 20.sp),
                     trailingIcon = {
@@ -147,17 +164,19 @@ fun ManageCategoryScreen(navController: NavController) {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 24.dp, end = 24.dp)
+                        .padding(start = 24.dp, end = 24.dp),
                 ) {
-                    items(categoryList) { item ->
+                    items(
+                        items = categoryList,
+                        key = {category -> category.uid }) { category  ->
                         ItemCategory(
-                            categoryEntity = item,
+                            categoryEntity = category ,
                             onDeleteClick = {
                                 viewModel.showDeleteDialog()
-                                viewModel.setDeleteTargetCategory(item)
+                                viewModel.setDeleteTargetCategory(category )
                             },
                             onEditClick = {
-                                viewModel.setEditTargetCategory(item)
+                                viewModel.setEditTargetCategory(category )
                                 viewModel.showEditCategoryDialog()
                             }
                         )
@@ -177,11 +196,14 @@ fun ManageCategoryScreen(navController: NavController) {
                     }
                 })
         }
+
         if (editCategoryDialogState) {
-            EditCategoryDialog(
+            EditTextDialog(
+                editTextTitle = stringResource(R.string.dialog_message_edit_category_text),
                 editTextState = editTargetCategoryTextState,
+                yesButtonText = stringResource(R.string.dialog_button_save),
                 onDismissRequest = { viewModel.closeEditCategoryDialog() },
-                onCategoryChange = { viewModel.onEditCategoryTextChange(it) },
+                onTextChange = { viewModel.onEditCategoryTextChange(it) },
                 onSaveRequest = {
                     viewModel.updateCategory(
                         CategoryEntity(

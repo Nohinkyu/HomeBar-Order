@@ -18,12 +18,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.devik.homebarorder.R
+import com.devik.homebarorder.extension.setImmersiveMode
 import com.devik.homebarorder.ui.theme.OrangeSoda
 
 @Composable
@@ -33,9 +35,12 @@ fun ManualDialog(onDismissRequest: () -> Unit) {
         onDismissRequest = { onDismissRequest() },
         properties = DialogProperties(
             dismissOnBackPress = true,
-            dismissOnClickOutside = true
+            dismissOnClickOutside = true,
+            usePlatformDefaultWidth = false
         )
     ) {
+        val view = LocalView.current
+        view.setImmersiveMode()
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -88,6 +93,14 @@ fun ManualDialog(onDismissRequest: () -> Unit) {
                 HeadRowText(
                     head = stringResource(id = R.string.dialog_message_manual_header_6),
                     body = stringResource(id = R.string.dialog_message_manual_body_6)
+                )
+                HeadRowText(
+                    head = stringResource(id = R.string.dialog_message_manual_header_7),
+                    body = stringResource(id = R.string.dialog_message_manual_body_7)
+                )
+                HeadRowText(
+                    head = stringResource(id = R.string.dialog_message_manual_header_8),
+                    body = stringResource(id = R.string.dialog_message_manual_body_8)
                 )
 
                 Button(

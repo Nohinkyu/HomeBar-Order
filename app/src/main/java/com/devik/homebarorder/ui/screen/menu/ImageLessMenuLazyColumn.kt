@@ -19,6 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devik.homebarorder.R
@@ -50,7 +52,7 @@ fun ImageLessColumnMenuItem(menu: MenuEntity, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp)
+            .height(136.dp)
             .padding(start = 16.dp, end = 16.dp)
             .clickable { onClick() },
         elevation = CardDefaults.cardElevation(5.dp)
@@ -62,19 +64,25 @@ fun ImageLessColumnMenuItem(menu: MenuEntity, onClick: () -> Unit) {
         ) {
             Text(
                 text = menu.menuName,
-                fontSize = 20.sp,
+                fontSize = 18.sp,
                 modifier = Modifier
                     .align(Alignment.TopStart)
-                    .padding(start = 16.dp, top = 16.dp)
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, top = 16.dp),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
 
             Text(
                 text = menu.menuInfo,
                 fontSize = 16.sp,
                 modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(start = 16.dp, bottom = 16.dp),
-                color = MediumGray
+                    .align(Alignment.TopStart)
+                    .fillMaxWidth()
+                    .padding(top = 48.dp ,start = 16.dp, end = 16.dp),
+                color = MediumGray,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
             )
 
             Text(
@@ -87,8 +95,12 @@ fun ImageLessColumnMenuItem(menu: MenuEntity, onClick: () -> Unit) {
                 fontSize = 18.sp,
                 color = OrangeSoda,
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 16.dp, bottom = 16.dp)
+                    .align(Alignment.BottomStart)
+                    .padding(start = 16.dp,end = 16.dp, bottom = 8.dp)
+                    .fillMaxWidth(),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.End
             )
         }
     }

@@ -6,7 +6,7 @@ object TextFormatUtil {
 
     val thousandsComma = DecimalFormat("#,###")
 
-    fun priceTextFormat(price: Int, measure: String):String {
+    fun priceTextFormat(price: Number, measure: String):String {
         return "${thousandsComma.format(price)} $measure"
     }
 }

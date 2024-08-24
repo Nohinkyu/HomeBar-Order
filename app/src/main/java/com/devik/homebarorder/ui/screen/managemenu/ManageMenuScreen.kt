@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -34,6 +35,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,19 +47,19 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Gray
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
 import com.devik.homebarorder.R
 import com.devik.homebarorder.data.source.local.database.CategoryEntity
 import com.devik.homebarorder.data.source.local.database.MenuEntity
+import com.devik.homebarorder.ui.component.image.AsyncImageWithDefaultIcon
 import com.devik.homebarorder.ui.component.navigation.NavigationRoute
 import com.devik.homebarorder.ui.component.topappbar.BackAndSearchIconAppBar
 import com.devik.homebarorder.ui.component.topappbar.SearchAppBar
@@ -82,8 +84,10 @@ fun ManageMenuScreen(navController: NavController) {
         val searchAppBarState by viewModel.searchAppBarState.collectAsStateWithLifecycle()
         val searchTextState by viewModel.searchTextState.collectAsStateWithLifecycle()
 
-        viewModel.getAllCategoryList()
-        viewModel.getAllMenuList()
+        LaunchedEffect(Unit) {
+            viewModel.getAllCategoryList()
+            viewModel.getAllMenuList()
+        }
 
         Scaffold(
             topBar = {
@@ -124,7 +128,9 @@ fun ManageMenuScreen(navController: NavController) {
                                 }
                             })
                         }
-                        items(allCategoryList) { item ->
+                        items(
+                            items = allCategoryList,
+                            key = {item -> item.uid}) { item ->
                             CategoryItem(categoryEntity = item,
                                 isSelected = item == selectedCategory,
                                 onClick = {
@@ -208,6 +214,7 @@ private fun CategoryItem(
         .height(48.dp)
         .clickable(onClick = onClick)
         .background(color = Color.White)
+        .widthIn(min = 80.dp, max = 160.dp)
         .then(
             if (isSelected) Modifier.drawBehind {
                 val borderStroke = 2.dp.toPx()
@@ -230,9 +237,12 @@ private fun CategoryItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.Center)
+                .widthIn(min = 80.dp, max = 160.dp)
                 .padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 12.dp),
             textAlign = TextAlign.Center,
             fontSize = 16.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -279,7 +289,6 @@ private fun MenuItem(
     onEditClick: () -> Unit,
     modifier: Modifier
 ) {
-    val imageBitmap by remember { mutableStateOf(menuEntity.menuImage) }
     var expandStatus by remember { mutableStateOf(false) }
 
     Column(modifier = modifier) {
@@ -305,34 +314,40 @@ private fun MenuItem(
                         .background(color = Color.White)
                         .align(Alignment.CenterStart)
                 ) {
-                    AsyncImage(
-                        model = imageBitmap,
+                    AsyncImageWithDefaultIcon(
+                        image = menuEntity.menuImage,
                         contentDescription = stringResource(R.string.content_description_menu_image),
                         modifier = Modifier
                             .size(height = 144.dp, width = 115.dp)
                             .padding(start = 8.dp)
-                            .clip(shape = RoundedCornerShape(5.dp)),
-                        contentScale = ContentScale.Crop,
+                            .clip(shape = RoundedCornerShape(5.dp))
                     )
                     Spacer(modifier = Modifier.size(16.dp))
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth(0.6f)
+                            .fillMaxWidth()
                             .height(144.dp)
+                            .weight(1f)
                             .background(color = Color.White)
                     ) {
                         Text(
                             text = menuEntity.menuName, modifier = Modifier
                                 .align(Alignment.TopStart)
-                                .padding(top = 8.dp),
-                            fontSize = 18.sp
+                                .fillMaxWidth()
+                                .padding(top = 8.dp, end = 48.dp),
+                            fontSize = 18.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Text(
                             text = menuEntity.menuInfo, modifier = Modifier
                                 .align(Alignment.TopStart)
-                                .padding(top = 48.dp),
+                                .padding(top = 48.dp, end = 48.dp)
+                                .fillMaxWidth(),
                             fontSize = 14.sp,
-                            color = Gray
+                            color = Gray,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Text(
                             text = TextFormatUtil.priceTextFormat(

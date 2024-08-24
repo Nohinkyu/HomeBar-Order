@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.devik.homebarorder.data.repository.CategoryRepository
 import com.devik.homebarorder.data.source.local.database.CategoryEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -58,6 +59,7 @@ class ManageCategoryViewModel @Inject constructor(private val categoryRepository
 
     fun deleteCategory(categoryEntity: CategoryEntity) {
         viewModelScope.launch {
+            async { categoryRepository.deleteAllMenusInCategory(categoryEntity.uid) }.await()
             categoryRepository.deleteCategory(categoryEntity)
             getAllCategoryList()
         }

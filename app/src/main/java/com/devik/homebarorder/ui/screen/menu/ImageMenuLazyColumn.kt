@@ -24,13 +24,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.devik.homebarorder.R
 import com.devik.homebarorder.data.source.local.database.MenuEntity
+import com.devik.homebarorder.ui.component.image.AsyncImageWithDefaultIcon
 import com.devik.homebarorder.ui.theme.OrangeSoda
 import com.devik.homebarorder.util.TextFormatUtil
 
@@ -57,7 +57,6 @@ fun ImageColumnMenuItem(
     menu: MenuEntity,
     onClick: () -> Unit
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -85,34 +84,40 @@ fun ImageColumnMenuItem(
                         .background(color = Color.White)
                         .align(Alignment.CenterStart)
                 ) {
-                    AsyncImage(
-                        model = menu.menuImage,
+                    AsyncImageWithDefaultIcon(
+                        image = menu.menuImage,
                         contentDescription = stringResource(R.string.content_description_menu_image),
                         modifier = Modifier
                             .size(height = 144.dp, width = 115.dp)
                             .padding(start = 8.dp)
-                            .clip(shape = RoundedCornerShape(5.dp)),
-                        contentScale = ContentScale.Crop,
+                            .clip(shape = RoundedCornerShape(5.dp))
                     )
                     Spacer(modifier = Modifier.size(16.dp))
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth(0.6f)
+                            .fillMaxWidth()
                             .height(144.dp)
                             .background(color = Color.White)
                     ) {
                         Text(
-                            text = menu.menuName, modifier = Modifier
+                            text = menu.menuName,
+                            modifier = Modifier
                                 .align(Alignment.TopStart)
-                                .padding(top = 8.dp),
-                            fontSize = 20.sp
+                                .padding(top = 8.dp, end = 24.dp)
+                                .fillMaxWidth(),
+                            fontSize = 20.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Text(
                             text = menu.menuInfo, modifier = Modifier
                                 .align(Alignment.TopStart)
-                                .padding(top = 48.dp),
+                                .padding(top = 48.dp, end = 24.dp)
+                                .fillMaxWidth(),
                             fontSize = 16.sp,
-                            color = Color.Gray
+                            color = Color.Gray,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Text(
                             text = TextFormatUtil.priceTextFormat(
@@ -124,7 +129,9 @@ fun ImageColumnMenuItem(
                                 .align(Alignment.BottomStart)
                                 .padding(bottom = 8.dp),
                             fontSize = 18.sp,
-                            color = OrangeSoda
+                            color = OrangeSoda,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
                 }

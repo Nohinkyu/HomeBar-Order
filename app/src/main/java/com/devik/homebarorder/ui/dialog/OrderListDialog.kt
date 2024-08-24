@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,14 +25,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.devik.homebarorder.R
 import com.devik.homebarorder.data.model.CartMenuItem
+import com.devik.homebarorder.extension.setImmersiveMode
 import com.devik.homebarorder.ui.theme.DarkGray
 import com.devik.homebarorder.ui.theme.LightGray
 import com.devik.homebarorder.ui.theme.OrangeSoda
@@ -42,7 +46,7 @@ fun OrderListDialog(
     cartMenuItemList: List<CartMenuItem>,
     onDismissRequest: () -> Unit,
     cartMenuItemCount: Int,
-    cartMenuItemAllPrice: Int,
+    cartMenuItemAllPrice: Long,
     onOrderClick: () -> Unit
 ) {
     Dialog(
@@ -53,6 +57,8 @@ fun OrderListDialog(
             usePlatformDefaultWidth = false
         )
     ) {
+        val view = LocalView.current
+        view.setImmersiveMode()
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -231,10 +237,13 @@ fun OrderListDialogItem(cartMenuItem: CartMenuItem) {
     Box(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = cartMenuItem.menuName,
-            fontSize = 20.sp,
+            fontSize = 18.sp,
             modifier = Modifier
                 .padding(start = 16.dp, top = 16.dp, bottom = 16.dp)
                 .align(Alignment.CenterStart)
+                .widthIn(max = 160.dp),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
         Row(
             modifier = Modifier
@@ -244,17 +253,21 @@ fun OrderListDialogItem(cartMenuItem: CartMenuItem) {
         ) {
             Text(
                 text = "${cartMenuItem.menuCount}",
-                fontSize = 20.sp,
+                fontSize = 18.sp,
                 modifier = Modifier
                     .padding(start = 12.dp, top = 16.dp, bottom = 16.dp),
-                color = OrangeSoda
+                color = OrangeSoda,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = TextFormatUtil.thousandsComma.format(cartMenuItem.menuCount * cartMenuItem.menuPrice),
-                fontSize = 20.sp,
+                fontSize = 18.sp,
                 modifier = Modifier
                     .padding(end = 16.dp, top = 16.dp, bottom = 16.dp),
-                color = OrangeSoda
+                color = OrangeSoda,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
         Divider(

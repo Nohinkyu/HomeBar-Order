@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -28,14 +29,17 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.devik.homebarorder.R
+import com.devik.homebarorder.extension.setImmersiveMode
 import com.devik.homebarorder.ui.theme.LightGray
 import com.devik.homebarorder.ui.theme.OrangeSoda
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditCategoryDialog(
+fun EditTextDialog(
+    editTextTitle: String,
     editTextState: String,
-    onCategoryChange: (text: String) -> Unit,
+    yesButtonText: String,
+    onTextChange: (text: String) -> Unit,
     onDismissRequest: () -> Unit,
     onSaveRequest: () -> Unit,
 ) {
@@ -47,6 +51,8 @@ fun EditCategoryDialog(
             dismissOnClickOutside = true
         )
     ) {
+        val view = LocalView.current
+        view.setImmersiveMode()
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -64,7 +70,7 @@ fun EditCategoryDialog(
                 Spacer(modifier = Modifier.heightIn(24.dp))
 
                 Text(
-                    text = stringResource(R.string.dialog_message_edit_category_text),
+                    text = editTextTitle,
                     fontSize = 12.sp,
                     modifier = Modifier.padding(start = 24.dp)
                 )
@@ -73,7 +79,7 @@ fun EditCategoryDialog(
 
                 OutlinedTextField(
                     value = editTextState,
-                    onValueChange = { onCategoryChange(it) },
+                    onValueChange = { onTextChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
@@ -115,7 +121,7 @@ fun EditCategoryDialog(
                         colors = ButtonDefaults.buttonColors(containerColor = OrangeSoda)
                     ) {
                         Text(
-                            text = stringResource(R.string.dialog_button_save),
+                            text = yesButtonText,
                             color = Color.White
                         )
                     }

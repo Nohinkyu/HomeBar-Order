@@ -46,7 +46,11 @@ class ManageMenuViewModel @Inject constructor(
     fun getAllMenuList() {
         viewModelScope.launch {
             _allMenuList.value = menuRepository.getAllMenu().sortedBy { it.menuPrice }
-            _selectedCategoryMenu.value = _allMenuList.value
+            if (_isAllCategorySelected.value) {
+                _selectedCategoryMenu.value = _allMenuList.value
+            } else {
+                _selectedCategory.value?.let { getSelectedCategoryMenu(it) }
+            }
         }
     }
 
@@ -93,28 +97,31 @@ class ManageMenuViewModel @Inject constructor(
     fun closeSearchAppBar() {
         _searchAppBarState.value = false
         _searchTextState.value = ""
-        if(_isAllCategorySelected.value) {
+        if (_isAllCategorySelected.value) {
             _selectedCategoryMenu.value = _allMenuList.value
-        }else {
-            _selectedCategoryMenu.value = _allMenuList.value.filter {menu ->
+        } else {
+            _selectedCategoryMenu.value = _allMenuList.value.filter { menu ->
                 menu.menuCategory == _selectedCategory.value?.uid
             }
         }
     }
 
     fun onSearchTextChange(text: String) {
-        _searchTextState.value = text
+        viewModelScope.launch {
+            _searchTextState.value = text
+            searchMenu(_searchTextState.value)
+        }
     }
 
     fun searchMenu(text: String) {
-        if(_isAllCategorySelected.value) {
+        if (_isAllCategorySelected.value) {
             _selectedCategoryMenu.value = _allMenuList.value.filter { menu ->
                 menu.toString().contains(text)
             }
-        }else {
+        } else {
             _selectedCategoryMenu.value = _allMenuList.value.filter { menu ->
                 menu.menuCategory == _selectedCategory.value?.uid
-            }.filter {menu ->
+            }.filter { menu ->
                 menu.toString().contains(text)
             }
         }

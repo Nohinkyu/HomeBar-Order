@@ -44,26 +44,42 @@ fun DrawerNaviMenu(
     scope: CoroutineScope,
     content: @Composable () -> Unit
 ) {
+    val preferenceManager = PreferenceManager(LocalContext.current)
+    val isManageMode = preferenceManager.getBoolean(Constants.KEY_MANAGE_MODE, true)
 
-    val drawerMenuItems = listOf<ScreenInfo>(
-        ScreenInfo(
-            stringResource(R.string.drawer_menu_screen_name_menu),
-            NavigationRoute.MENU_SCREEN
-        ),
-        ScreenInfo(
-            stringResource(R.string.drawer_menu_screen_name_manage_category),
-            NavigationRoute.MANAGE_CATEGORY_SCREEN
-        ),
-        ScreenInfo(
-            stringResource(R.string.drawer_menu_screen_name_manage_menu),
-            NavigationRoute.MANAGE_MENU_SCREEN
-        ),
-        ScreenInfo(
-            stringResource(R.string.drawer_menu_screen_name_setting),
-            NavigationRoute.SETTING_SCREEN
+    val drawerMenuItems = if (isManageMode) {
+        listOf<ScreenInfo>(
+            ScreenInfo(
+                stringResource(R.string.drawer_menu_screen_name_menu),
+                NavigationRoute.TABLET_MENU_SCREEN
+            ),
+            ScreenInfo(
+                stringResource(R.string.drawer_menu_screen_name_manage_category),
+                NavigationRoute.MANAGE_CATEGORY_SCREEN
+            ),
+            ScreenInfo(
+                stringResource(R.string.drawer_menu_screen_name_manage_menu),
+                NavigationRoute.MANAGE_MENU_SCREEN
+            ),
+            ScreenInfo(
+                stringResource(R.string.drawer_menu_screen_name_setting),
+                NavigationRoute.SETTING_SCREEN
+            )
         )
+    } else {
+        listOf<ScreenInfo>(
+            ScreenInfo(
+                stringResource(R.string.drawer_menu_screen_name_menu),
+                NavigationRoute.TABLET_MENU_SCREEN
+            ),
+            ScreenInfo(
+                stringResource(R.string.drawer_menu_screen_name_setting),
+                NavigationRoute.SETTING_SCREEN
+            )
+        )
+    }
 
-    )
+
     var selectedItem by rememberSaveable { mutableStateOf(0) }
     val gesturesEnabled = drawerState.currentValue == DrawerValue.Open
 
@@ -80,7 +96,7 @@ fun DrawerNaviMenu(
         drawerContent = {
             ModalDrawerSheet {
                 Spacer(modifier = Modifier.size(16.dp))
-                DrawerMenuHeader()
+                DrawerMenuHeader(isManageMode)
                 Spacer(modifier = Modifier.size(16.dp))
                 drawerMenuItems.forEachIndexed { index, item ->
                     NavigationDrawerItem(
@@ -90,15 +106,16 @@ fun DrawerNaviMenu(
                             if (selectedItem != index) {
                                 selectedItem = index
                                 scope.launch {
-                                    drawerState.close()
                                     navController.navigate(item.screenRoute)
+                                    drawerState.close()
                                 }
                             } else {
                                 scope.launch {
                                     drawerState.close()
                                 }
                             }
-                        })
+                        }
+                    )
                 }
             }
         },
@@ -107,15 +124,24 @@ fun DrawerNaviMenu(
 }
 
 @Composable
-private fun DrawerMenuHeader() {
+private fun DrawerMenuHeader(isManageMode: Boolean) {
     val context = LocalContext.current
     val preferenceManager = PreferenceManager(context)
-    val userMailAddressState by remember {
-        mutableStateOf(preferenceManager.getString(Constants.KEY_MAIL_ADDRESS, ""))
+    val userMail = preferenceManager.getString(Constants.KEY_MAIL_ADDRESS, "")
+    val userMailAddressState = if (isManageMode) {
+        userMail
+    } else {
+        if (userMail.length > 3) {
+            "*".repeat(3) + userMail.substring(3)
+        } else {
+            "*".repeat(userMail.length)
+        }
     }
+
     val userImageState by remember {
         mutableStateOf(preferenceManager.getString(Constants.KEY_PROFILE_IMAGE, ""))
     }
+
 
     Row() {
         Spacer(modifier = Modifier.size(8.dp))

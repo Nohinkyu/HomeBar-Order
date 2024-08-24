@@ -8,4 +8,6 @@ interface CategoryDataSource {
     suspend fun deleteCategory(categoryEntity: CategoryEntity)
     suspend fun getAllCategory(): List<CategoryEntity>
     suspend fun updateCategory(categoryEntity: CategoryEntity)
+    suspend fun isCategoryExists(category: Int): Boolean
+    suspend fun deleteAllMenusInCategory(category: Int)
 }

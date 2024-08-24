@@ -3,7 +3,6 @@ package com.devik.homebarorder.ui.dialog
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,11 +27,10 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.devik.homebarorder.R
 import com.devik.homebarorder.extension.setImmersiveMode
-import com.devik.homebarorder.ui.theme.LightGray
 import com.devik.homebarorder.ui.theme.OrangeSoda
 
 @Composable
-fun YesOrNoDialog(
+fun YesButtonDialog(
     body: String,
     yesButtonText: String,
     onDismissRequest: () -> Unit,
@@ -82,26 +80,9 @@ fun YesOrNoDialog(
 
                 Spacer(modifier = Modifier.heightIn(16.dp))
 
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Button(
-                        onClick = { onDismissRequest() },
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .fillMaxWidth(0.5f)
-                            .padding(start = 16.dp, end = 16.dp)
-                            .heightIn(48.dp),
-                        shape = RoundedCornerShape(5.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = LightGray),
-                    ) {
-                        Text(
-                            text = stringResource(R.string.dialog_button_cancel),
-                            color = Color.Black
-                        )
-                    }
                     Button(
                         onClick = onYesClickRequest,
                         modifier = Modifier
-                            .align(Alignment.CenterEnd)
                             .fillMaxWidth(0.5f)
                             .padding(start = 16.dp, end = 16.dp)
                             .heightIn(48.dp),
@@ -110,7 +91,6 @@ fun YesOrNoDialog(
                     ) {
                         Text(text = yesButtonText, color = Color.White)
                     }
-                }
             }
         }
     }

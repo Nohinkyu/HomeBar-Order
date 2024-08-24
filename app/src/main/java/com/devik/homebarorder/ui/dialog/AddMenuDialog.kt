@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
@@ -28,7 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color.Companion.Gray
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -36,9 +39,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import coil.compose.AsyncImage
 import com.devik.homebarorder.R
 import com.devik.homebarorder.data.source.local.database.MenuEntity
+import com.devik.homebarorder.extension.setImmersiveMode
+import com.devik.homebarorder.ui.component.image.AsyncImageWithDefaultIcon
 import com.devik.homebarorder.ui.theme.LightGray
 import com.devik.homebarorder.ui.theme.OrangeSoda
 import com.devik.homebarorder.util.TextFormatUtil
@@ -59,6 +63,8 @@ fun AddMenuDialog(
             usePlatformDefaultWidth = false
         )
     ) {
+        val view = LocalView.current
+        view.setImmersiveMode()
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -80,14 +86,13 @@ fun AddMenuDialog(
                             .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        AsyncImage(
-                            model = menuEntity.menuImage,
+                        AsyncImageWithDefaultIcon(
+                            image = menuEntity.menuImage,
                             contentDescription = stringResource(R.string.content_description_menu_image),
                             modifier = Modifier
                                 .width(150.dp)
                                 .height(200.dp)
-                                .clip(shape = RoundedCornerShape(10.dp)),
-                            contentScale = ContentScale.Crop
+                                .clip(shape = RoundedCornerShape(10.dp))
                         )
                         Column(
                             modifier = Modifier
@@ -100,9 +105,17 @@ fun AddMenuDialog(
                                     .fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(text = menuEntity.menuName, fontSize = 18.sp)
+                                Text(
+                                    text = menuEntity.menuName,
+                                    fontSize = 18.sp,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .weight(1f)
+                                )
 
-                                Spacer(modifier = Modifier.width(64.dp))
+                                Spacer(modifier = Modifier.width(24.dp))
 
                                 IconButton(
                                     onClick = onMinusClick,
@@ -140,21 +153,30 @@ fun AddMenuDialog(
                                         tint = Color.Black
                                     )
                                 }
-                                Spacer(modifier = Modifier.width(64.dp))
-
-                                Text(
-                                    text = TextFormatUtil.priceTextFormat(
-                                        menuEntity.menuPrice * menuCount, stringResource(
-                                            R.string.price
-                                        )
-                                    ),
-                                    fontSize = 20.sp, color = OrangeSoda
-                                )
+                                Spacer(modifier = Modifier.width(16.dp))
                             }
                             Spacer(modifier = Modifier.size(8.dp))
                             Divider(thickness = 2.dp, color = OrangeSoda)
                             Spacer(modifier = Modifier.size(16.dp))
-                            Text(text = menuEntity.menuInfo, fontSize = 16.sp)
+                            Text(
+                                text = menuEntity.menuInfo,
+                                fontSize = 16.sp,
+                                color = Gray,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(100.dp)
+                                    .padding(end = 40.dp)
+                                    .verticalScroll(rememberScrollState())
+                            )
+                            Spacer(modifier = Modifier.size(16.dp))
+                            Text(
+                                text = TextFormatUtil.priceTextFormat(
+                                    menuEntity.menuPrice * menuCount, stringResource(
+                                        R.string.price
+                                    )
+                                ),
+                                fontSize = 20.sp, color = OrangeSoda
+                            )
                         }
                     }
                 }

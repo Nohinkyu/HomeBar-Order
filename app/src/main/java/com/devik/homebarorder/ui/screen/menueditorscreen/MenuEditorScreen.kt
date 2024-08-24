@@ -6,13 +6,13 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,6 +43,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,7 +63,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.devik.homebarorder.R
+import com.devik.homebarorder.extension.throttledClickable
 import com.devik.homebarorder.ui.component.topappbar.BackIconWithTitleAppBar
+import com.devik.homebarorder.ui.dialog.InProgressDialog
+import com.devik.homebarorder.ui.dialog.YesOrNoDialog
 import com.devik.homebarorder.ui.theme.LightGray
 import com.devik.homebarorder.ui.theme.MediumGray
 import com.devik.homebarorder.ui.theme.OrangeSoda
@@ -76,6 +80,7 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
     ) {
         val viewModel: MenuEditorViewModel = hiltViewModel()
         val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
 
         val menuCategory by viewModel.menuCategory.collectAsStateWithLifecycle()
         val categoryList by viewModel.categoryList.collectAsStateWithLifecycle()
@@ -83,8 +88,10 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
         val menuInfo by viewModel.menuInfo.collectAsStateWithLifecycle()
         val menuPrice by viewModel.menuPrice.collectAsStateWithLifecycle()
         val menuImageBitmap by viewModel.menuImageBitmap.collectAsStateWithLifecycle()
-        val isMenuNameCategoryBlank by viewModel.isMenuNameCategoryBlank.collectAsStateWithLifecycle()
+        val isNavigateDialogState by viewModel.isNavigateDialogState.collectAsStateWithLifecycle()
         val buttonTextState by viewModel.buttonTextState.collectAsStateWithLifecycle()
+        val isMenuSaveSuccess by viewModel.isMenuSaveSuccess.collectAsStateWithLifecycle()
+        val isInProgressDialogState by viewModel.isInProgressDialogState.collectAsStateWithLifecycle()
         var expandStatus by remember { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
@@ -99,16 +106,50 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
             contract = ActivityResultContracts.PickVisualMedia(),
             onResult = { uri ->
                 if (uri != null) {
-                    viewModel.setMenuImageBitmap(setImageBitmap(context, uri))
+                    val imageFileSize = getImageFileSize(context, uri)
+                    if(imageFileSize > 20.0) {
+                        Toast.makeText(context, context.getString(R.string.toast_message_image_size_big), Toast.LENGTH_SHORT).show()
+                    }else {
+                        viewModel.setMenuImageBitmap(setImageBitmap(context, uri, imageFileSize))
+                    }
                 }
             }
         )
+
+        if (isNavigateDialogState) {
+            YesOrNoDialog(
+                body = stringResource(R.string.navigate_dialog_body).trimMargin(),
+                yesButtonText = stringResource(R.string.navigate_dialog_button_yes),
+                onDismissRequest = { viewModel.closeNavigateUpDialog() },
+                onYesClickRequest = { navController.navigateUp() }
+            )
+        }
+        
+        if(isInProgressDialogState){
+            InProgressDialog(message = stringResource(R.string.menu_save_in_progress_dialog))
+        }
+
+        if(isMenuSaveSuccess){
+            LaunchedEffect(Unit){
+                navController.navigateUp()
+            }
+        }
 
         Scaffold(
             topBar = {
                 BackIconWithTitleAppBar(
                     title = stringResource(R.string.top_appbar_title_edit_add_menu),
-                    navController = navController
+                    onBackIconClick = {
+                        if (menuName.isNotBlank() ||
+                            menuInfo.isNotBlank() ||
+                            menuPrice.isNotBlank() ||
+                            menuImageBitmap != null
+                        ) {
+                            viewModel.openNavigateUpDialog()
+                        } else {
+                            navController.navigateUp()
+                        }
+                    }
                 )
             },
             modifier = Modifier.padding(top = 8.dp)
@@ -127,13 +168,16 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
                                 .height(200.dp)
                                 .padding(start = 24.dp, top = 32.dp)
                                 .background(color = MediumGray, shape = RoundedCornerShape(10.dp))
-                                .clickable {
-                                    singlePhotoPickerLauncher.launch(
-                                        PickVisualMediaRequest(
-                                            ActivityResultContracts.PickVisualMedia.ImageOnly
+                                .throttledClickable(
+                                    coroutineScope = coroutineScope,
+                                    onClick = {
+                                        singlePhotoPickerLauncher.launch(
+                                            PickVisualMediaRequest(
+                                                ActivityResultContracts.PickVisualMedia.ImageOnly
+                                            )
                                         )
-                                    )
-                                },
+                                    }
+                                ),
                         ) {
                             Image(
                                 painter = painterResource(R.drawable.ic_camera),
@@ -180,8 +224,8 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
                             MenuEditTextFiled(
                                 textValue = menuInfo,
                                 onValueChange = { viewModel.setMenuInfo(it) },
-                                maxLines = 4,
-                                placeholder = stringResource(R.string.placeholder_menu_info)
+                                maxLines = 6,
+                                placeholder = stringResource(R.string.placeholder_menu_info),
                             )
 
                             Button(
@@ -261,8 +305,8 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
                             } else {
                                 viewModel.insertMenu()
                             }
-                            navController.navigateUp()
-                        } else{
+//                            navController.navigateUp()
+                        } else {
                             Toast.makeText(
                                 context,
                                 context.getString(R.string.message_is_category_and_menu_name_blank),
@@ -315,7 +359,9 @@ fun MenuEditTextFiled(
     )
 }
 
-private fun setImageBitmap(context: Context, uri: Uri): Bitmap {
+private fun setImageBitmap(context: Context, uri: Uri,imageFileSize:Double): Bitmap {
+    val toastMessage = Toast.makeText(context, context.getString(R.string.toast_message_image_resize), Toast.LENGTH_SHORT)
+
     val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         ImageDecoder.decodeBitmap(
             ImageDecoder.createSource(context.contentResolver, uri)
@@ -323,5 +369,25 @@ private fun setImageBitmap(context: Context, uri: Uri): Bitmap {
     } else {
         MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
     }
-    return bitmap
+    return if(imageFileSize > 10.0 && imageFileSize < 20.0) {
+        toastMessage.show()
+        Bitmap.createScaledBitmap(bitmap, bitmap.width/4, bitmap.height/4, true)
+    }else if(imageFileSize >3.0 && imageFileSize < 10.0){
+        toastMessage.show()
+        Bitmap.createScaledBitmap(bitmap, bitmap.width / 2, bitmap.height / 2, true)
+    }else{
+        Bitmap.createScaledBitmap(bitmap, bitmap.width , bitmap.height, true)
+    }
+}
+
+private fun getImageFileSize(context: Context, uri: Uri): Double {
+    val cursor = context.contentResolver.query(uri, null, null, null, null)
+    var size: Long = 0
+    cursor?.use {
+        val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
+        if (it.moveToFirst()) {
+            size = it.getLong(sizeIndex)
+        }
+    }
+    return size / (1024.0 * 1024.0)
 }

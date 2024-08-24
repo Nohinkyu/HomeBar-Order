@@ -10,6 +10,7 @@ import com.devik.homebarorder.data.source.local.database.CategoryEntity
 import com.devik.homebarorder.data.source.local.database.MenuEntity
 import com.devik.homebarorder.di.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -34,7 +35,8 @@ class MenuEditorViewModel @Inject constructor(
     private val _menuInfo = MutableStateFlow<String>("")
     val menuInfo: StateFlow<String> = _menuInfo
 
-    private val _menuCategory = MutableStateFlow<CategoryEntity>(CategoryEntity(category = resourceProvider.getString(R.string.button_category)))
+    private val _menuCategory =
+        MutableStateFlow<CategoryEntity>(CategoryEntity(category = resourceProvider.getString(R.string.button_category)))
     val menuCategory: StateFlow<CategoryEntity> = _menuCategory
 
     private val _menuImageBitmap = MutableStateFlow<Bitmap?>(null)
@@ -45,6 +47,15 @@ class MenuEditorViewModel @Inject constructor(
 
     private val _buttonTextState = MutableStateFlow<String>("")
     val buttonTextState: StateFlow<String> = _buttonTextState
+
+    private val _isNavigateDialogState = MutableStateFlow<Boolean>(false)
+    val isNavigateDialogState: StateFlow<Boolean> = _isNavigateDialogState
+
+    private val _isMenuSaveSuccess = MutableStateFlow<Boolean>(false)
+    val isMenuSaveSuccess: StateFlow<Boolean> = _isMenuSaveSuccess
+
+    private val _isInProgressDialogState = MutableStateFlow<Boolean>(false)
+    val isInProgressDialogState: StateFlow<Boolean> = _isInProgressDialogState
 
     private val _editTargetMenuUid = MutableStateFlow<Int>(0)
 
@@ -86,8 +97,8 @@ class MenuEditorViewModel @Inject constructor(
         }
     }
 
-    fun checkMenuNameCategoryBlank():Boolean {
-         return _menuName.value.isNotBlank() && _categoryList.value.contains(_menuCategory.value)
+    fun checkMenuNameCategoryBlank(): Boolean {
+        return _menuName.value.isNotBlank() && _categoryList.value.contains(_menuCategory.value)
     }
 
     fun getEditTargetMenu(uid: Int) {
@@ -109,18 +120,21 @@ class MenuEditorViewModel @Inject constructor(
         val menuPrice = if (_menuPrice.value.isBlank()) {
             0
         } else {
-            _menuPrice.value.toInt()
+            _menuPrice.value.toLong()
         }
         viewModelScope.launch {
+            _isInProgressDialogState.value = true
             if (_menuName.value.isNotBlank() && _categoryList.value.contains(_menuCategory.value)) {
                 val menu = MenuEntity(
                     menuName = _menuName.value,
                     menuInfo = _menuInfo.value,
                     menuPrice = menuPrice,
                     menuCategory = _menuCategory.value.uid,
-                    menuImage = menuImageBitmap.value
+                    menuImage = _menuImageBitmap.value
                 )
-                menuRepository.insertMenu(menu)
+                async { menuRepository.insertMenu(menu) }.await()
+                _isInProgressDialogState.value = false
+                _isMenuSaveSuccess.value = true
             } else {
                 _isMenuNameCategoryBlank.value = true
             }
@@ -131,9 +145,10 @@ class MenuEditorViewModel @Inject constructor(
         val menuPrice = if (_menuPrice.value.isBlank()) {
             0
         } else {
-            _menuPrice.value.toInt()
+            _menuPrice.value.toLong()
         }
         viewModelScope.launch {
+            _isInProgressDialogState.value = true
             if (_menuName.value.isNotBlank() && _categoryList.value.contains(_menuCategory.value)) {
                 val menu = MenuEntity(
                     uid = _editTargetMenuUid.value,
@@ -141,12 +156,22 @@ class MenuEditorViewModel @Inject constructor(
                     menuInfo = _menuInfo.value,
                     menuPrice = menuPrice,
                     menuCategory = _menuCategory.value.uid,
-                    menuImage = menuImageBitmap.value
+                    menuImage = _menuImageBitmap.value
                 )
-                menuRepository.updateMenu(menu)
+                async { menuRepository.updateMenu(menu) }.await()
+                _isInProgressDialogState.value = false
+                _isMenuSaveSuccess.value = true
             } else {
                 _isMenuNameCategoryBlank.value = true
             }
         }
+    }
+
+    fun openNavigateUpDialog() {
+        _isNavigateDialogState.value = true
+    }
+
+    fun closeNavigateUpDialog() {
+        _isNavigateDialogState.value = false
     }
 }

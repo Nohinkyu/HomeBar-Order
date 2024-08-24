@@ -33,6 +33,7 @@ import com.devik.homebarorder.R
 import com.devik.homebarorder.data.source.local.database.PreferenceManager
 import com.devik.homebarorder.ui.component.navigation.NavigationRoute
 import com.devik.homebarorder.util.Constants
+import com.devik.homebarorder.util.isMobile
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
@@ -73,6 +74,7 @@ private fun GoogleSignInButton(navController: NavController) {
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val isMobile = isMobile()
     val preferenceManager = PreferenceManager(context)
     val supabase = createSupabaseClient(
         supabaseUrl = BuildConfig.SUPABASE_PROJECT_URL,
@@ -132,8 +134,14 @@ private fun GoogleSignInButton(navController: NavController) {
                 preferenceManager.putString(Constants.KEY_MAIL_ADDRESS, supabaseAuth?.email.toString())
                 preferenceManager.putString(Constants.KEY_PROFILE_IMAGE, userImage.toString())
 
-                navController.navigate(NavigationRoute.MENU_SCREEN) {
-                    popUpTo(NavigationRoute.SIGN_IN_SCREEN) { inclusive = true }
+                if(isMobile){
+                    navController.navigate(NavigationRoute.MOBILE_MENU_SCREEN) {
+                        popUpTo(NavigationRoute.SIGN_IN_SCREEN) { inclusive = true }
+                    }
+                }else{
+                    navController.navigate(NavigationRoute.TABLET_MENU_SCREEN) {
+                        popUpTo(NavigationRoute.SIGN_IN_SCREEN) { inclusive = true }
+                    }
                 }
 
                 Toast.makeText(

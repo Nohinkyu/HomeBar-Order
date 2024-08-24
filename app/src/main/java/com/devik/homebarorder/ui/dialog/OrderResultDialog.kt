@@ -15,12 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.devik.homebarorder.R
+import com.devik.homebarorder.extension.setImmersiveMode
 import com.devik.homebarorder.ui.theme.LightGray
 import com.devik.homebarorder.ui.theme.OrangeSoda
 
@@ -29,16 +31,18 @@ fun OrderResultDialog(
     onDismissRequest: () -> Unit,
     resultMessageTitle: String,
     resultMessageBody: String,
-    orderNumber: Int? = null
+    tableNumber: String? = null
 ) {
 
-    val orderNumberState = if (orderNumber != null) {
-        "${stringResource(R.string.order_number)} $orderNumber"
+    val orderNumberState = if (tableNumber != null) {
+        "${stringResource(R.string.order_number)} $tableNumber"
     } else {
         stringResource(R.string.order_result_dialog_button_close)
     }
 
     Dialog(onDismissRequest = onDismissRequest) {
+        val view = LocalView.current
+        view.setImmersiveMode()
         Column(
             modifier = Modifier
                 .fillMaxWidth()

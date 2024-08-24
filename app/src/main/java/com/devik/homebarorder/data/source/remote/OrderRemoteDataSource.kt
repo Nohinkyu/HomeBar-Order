@@ -35,18 +35,12 @@ class OrderRemoteDataSource @Inject constructor(
                             Constants.KEY_MAIL_ADDRESS,
                             ""
                         ),
-                        Constants.SUPABASE_DB_COLUMN_ORDER_NUMBER to "${
-                            preferenceManager.getInt(
-                                Constants.KEY_ORDER_NUMBER
-                            ) + 1
-                        }",
+                        Constants.SUPABASE_DB_COLUMN_ORDER_NUMBER to
+                                preferenceManager.getString(
+                                    Constants.KEY_TABLE_NUMBER, "1"
+                                )
                     )
                 )
-                if(preferenceManager.getInt(Constants.KEY_ORDER_NUMBER) == 1000){
-                    preferenceManager.putInt(Constants.KEY_ORDER_NUMBER, 0)
-                }else{
-                    preferenceManager.putInt(Constants.KEY_ORDER_NUMBER, preferenceManager.getInt(Constants.KEY_ORDER_NUMBER)+1)
-                }
                 true
             }
             true
