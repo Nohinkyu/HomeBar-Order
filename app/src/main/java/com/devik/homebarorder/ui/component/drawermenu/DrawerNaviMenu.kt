@@ -47,7 +47,7 @@ fun DrawerNaviMenu(
     val preferenceManager = PreferenceManager(LocalContext.current)
     val isManageMode = preferenceManager.getBoolean(Constants.KEY_MANAGE_MODE, true)
 
-    val drawerMenuItems = if(isManageMode) {
+    val drawerMenuItems = if (isManageMode) {
         listOf<ScreenInfo>(
             ScreenInfo(
                 stringResource(R.string.drawer_menu_screen_name_menu),
@@ -96,7 +96,7 @@ fun DrawerNaviMenu(
         drawerContent = {
             ModalDrawerSheet {
                 Spacer(modifier = Modifier.size(16.dp))
-                DrawerMenuHeader()
+                DrawerMenuHeader(isManageMode)
                 Spacer(modifier = Modifier.size(16.dp))
                 drawerMenuItems.forEachIndexed { index, item ->
                     NavigationDrawerItem(
@@ -124,15 +124,24 @@ fun DrawerNaviMenu(
 }
 
 @Composable
-private fun DrawerMenuHeader() {
+private fun DrawerMenuHeader(isManageMode: Boolean) {
     val context = LocalContext.current
     val preferenceManager = PreferenceManager(context)
-    val userMailAddressState by remember {
-        mutableStateOf(preferenceManager.getString(Constants.KEY_MAIL_ADDRESS, ""))
+    val userMail = preferenceManager.getString(Constants.KEY_MAIL_ADDRESS, "")
+    val userMailAddressState = if (isManageMode) {
+        userMail
+    } else {
+        if (userMail.length > 3) {
+            "*".repeat(3) + userMail.substring(3)
+        } else {
+            "*".repeat(userMail.length)
+        }
     }
+
     val userImageState by remember {
         mutableStateOf(preferenceManager.getString(Constants.KEY_PROFILE_IMAGE, ""))
     }
+
 
     Row() {
         Spacer(modifier = Modifier.size(8.dp))

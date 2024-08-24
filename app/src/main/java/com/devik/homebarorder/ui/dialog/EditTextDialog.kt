@@ -35,9 +35,11 @@ import com.devik.homebarorder.ui.theme.OrangeSoda
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditCategoryDialog(
+fun EditTextDialog(
+    editTextTitle: String,
     editTextState: String,
-    onCategoryChange: (text: String) -> Unit,
+    yesButtonText: String,
+    onTextChange: (text: String) -> Unit,
     onDismissRequest: () -> Unit,
     onSaveRequest: () -> Unit,
 ) {
@@ -68,7 +70,7 @@ fun EditCategoryDialog(
                 Spacer(modifier = Modifier.heightIn(24.dp))
 
                 Text(
-                    text = stringResource(R.string.dialog_message_edit_category_text),
+                    text = editTextTitle,
                     fontSize = 12.sp,
                     modifier = Modifier.padding(start = 24.dp)
                 )
@@ -77,7 +79,7 @@ fun EditCategoryDialog(
 
                 OutlinedTextField(
                     value = editTextState,
-                    onValueChange = { onCategoryChange(it) },
+                    onValueChange = { onTextChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
@@ -119,7 +121,7 @@ fun EditCategoryDialog(
                         colors = ButtonDefaults.buttonColors(containerColor = OrangeSoda)
                     ) {
                         Text(
-                            text = stringResource(R.string.dialog_button_save),
+                            text = yesButtonText,
                             color = Color.White
                         )
                     }

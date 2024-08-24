@@ -53,7 +53,7 @@ import com.devik.homebarorder.ui.component.drawermenu.DrawerNaviMenu
 import com.devik.homebarorder.ui.component.topappbar.MenuIconWithTitleAppBar
 import com.devik.homebarorder.ui.dialog.AddMenuDialog
 import com.devik.homebarorder.ui.dialog.ManualDialog
-import com.devik.homebarorder.ui.dialog.OrderInProgressDialog
+import com.devik.homebarorder.ui.dialog.InProgressDialog
 import com.devik.homebarorder.ui.dialog.OrderListDialog
 import com.devik.homebarorder.ui.dialog.OrderResultDialog
 import com.devik.homebarorder.ui.theme.DarkGray
@@ -90,7 +90,7 @@ fun TabletMenuScreen(navController: NavController) {
         val isOrderSuccess by viewModel.isOrderSuccess.collectAsStateWithLifecycle()
         val isOrderFail by viewModel.isOrderFail.collectAsStateWithLifecycle()
         val menuListFormatState by viewModel.menuListFormatState.collectAsStateWithLifecycle()
-        val orderNumberState by viewModel.orderNumberState.collectAsStateWithLifecycle()
+        val orderNumberState by viewModel.tableNumberState.collectAsStateWithLifecycle()
 
         val scope = rememberCoroutineScope()
 
@@ -133,7 +133,7 @@ fun TabletMenuScreen(navController: NavController) {
         }
 
         if (isOrderInProgress) {
-            OrderInProgressDialog(stringResource(R.string.order_in_progress_dialog_body))
+            InProgressDialog(stringResource(R.string.order_in_progress_dialog_body))
         }
 
         if (isOrderSuccess) {
@@ -141,7 +141,7 @@ fun TabletMenuScreen(navController: NavController) {
                 onDismissRequest = { viewModel.closeOrderSuccessDialog() },
                 resultMessageTitle = stringResource(R.string.order_result_dialog_success_title),
                 resultMessageBody = stringResource(R.string.order_result_dialog_success_body),
-                orderNumber = orderNumberState
+                tableNumber = orderNumberState
             )
         }
 

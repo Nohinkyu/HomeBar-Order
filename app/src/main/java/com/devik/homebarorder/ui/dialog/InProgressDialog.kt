@@ -23,7 +23,7 @@ import com.devik.homebarorder.extension.setImmersiveMode
 import com.devik.homebarorder.ui.theme.OrangeSoda
 
 @Composable
-fun OrderInProgressDialog(message: String) {
+fun InProgressDialog(message: String) {
     Dialog(
         onDismissRequest = { },
         properties = DialogProperties(

@@ -6,6 +6,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -64,8 +65,8 @@ import coil.compose.AsyncImage
 import com.devik.homebarorder.R
 import com.devik.homebarorder.extension.throttledClickable
 import com.devik.homebarorder.ui.component.topappbar.BackIconWithTitleAppBar
-import com.devik.homebarorder.ui.dialog.MenuSaveSuccessDialog
-import com.devik.homebarorder.ui.dialog.OrderInProgressDialog
+import com.devik.homebarorder.ui.dialog.InProgressDialog
+import com.devik.homebarorder.ui.dialog.YesOrNoDialog
 import com.devik.homebarorder.ui.theme.LightGray
 import com.devik.homebarorder.ui.theme.MediumGray
 import com.devik.homebarorder.ui.theme.OrangeSoda
@@ -87,10 +88,10 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
         val menuInfo by viewModel.menuInfo.collectAsStateWithLifecycle()
         val menuPrice by viewModel.menuPrice.collectAsStateWithLifecycle()
         val menuImageBitmap by viewModel.menuImageBitmap.collectAsStateWithLifecycle()
-        val isMenuNameCategoryBlank by viewModel.isMenuNameCategoryBlank.collectAsStateWithLifecycle()
+        val isNavigateDialogState by viewModel.isNavigateDialogState.collectAsStateWithLifecycle()
         val buttonTextState by viewModel.buttonTextState.collectAsStateWithLifecycle()
-        val isSavingState by viewModel.isSavingState.collectAsStateWithLifecycle()
-        val isSavingSuccess by viewModel.isSavingSuccess.collectAsStateWithLifecycle()
+        val isMenuSaveSuccess by viewModel.isMenuSaveSuccess.collectAsStateWithLifecycle()
+        val isInProgressDialogState by viewModel.isInProgressDialogState.collectAsStateWithLifecycle()
         var expandStatus by remember { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
@@ -105,50 +106,50 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
             contract = ActivityResultContracts.PickVisualMedia(),
             onResult = { uri ->
                 if (uri != null) {
-                    viewModel.setMenuImageBitmap(setImageBitmap(context, uri))
+                    val imageFileSize = getImageFileSize(context, uri)
+                    if(imageFileSize > 20.0) {
+                        Toast.makeText(context, context.getString(R.string.toast_message_image_size_big), Toast.LENGTH_SHORT).show()
+                    }else {
+                        viewModel.setMenuImageBitmap(setImageBitmap(context, uri, imageFileSize))
+                    }
                 }
             }
         )
 
-        if (isSavingState) {
-            OrderInProgressDialog(stringResource(R.string.menu_save_in_progress_message))
+        if (isNavigateDialogState) {
+            YesOrNoDialog(
+                body = stringResource(R.string.navigate_dialog_body).trimMargin(),
+                yesButtonText = stringResource(R.string.navigate_dialog_button_yes),
+                onDismissRequest = { viewModel.closeNavigateUpDialog() },
+                onYesClickRequest = { navController.navigateUp() }
+            )
+        }
+        
+        if(isInProgressDialogState){
+            InProgressDialog(message = stringResource(R.string.menu_save_in_progress_dialog))
         }
 
-        if (isSavingSuccess && editTargetMenuUid == null) {
-            MenuSaveSuccessDialog(
-                body = stringResource(R.string.menu_save_success_dialog_body),
-                yesButtonText = stringResource(R.string.menu_save_success_dialog_yes_button),
-                onDismissRequest = { viewModel.closeSuccessDialog() },
-                onYesClickRequest = {
-                    viewModel.closeSuccessDialog()
-                    viewModel.clearMenuInfo()
-                },
-                onCancelClick = {
-                    viewModel.closeSuccessDialog()
-                    navController.navigateUp()
-                })
-        }
-
-        if (isSavingSuccess && editTargetMenuUid != null) {
-            MenuSaveSuccessDialog(
-                body = stringResource(R.string.menu_edit_success_dialog_body),
-                yesButtonText = stringResource(R.string.menu_edit_success_dialog_yes_button),
-                onDismissRequest = { viewModel.closeSuccessDialog() },
-                onYesClickRequest = {
-                    viewModel.closeSuccessDialog()
-                    navController.navigateUp()
-                },
-                onCancelClick = {
-                    viewModel.closeSuccessDialog()
-                    navController.navigateUp()
-                })
+        if(isMenuSaveSuccess){
+            LaunchedEffect(Unit){
+                navController.navigateUp()
+            }
         }
 
         Scaffold(
             topBar = {
                 BackIconWithTitleAppBar(
                     title = stringResource(R.string.top_appbar_title_edit_add_menu),
-                    navController = navController
+                    onBackIconClick = {
+                        if (menuName.isNotBlank() ||
+                            menuInfo.isNotBlank() ||
+                            menuPrice.isNotBlank() ||
+                            menuImageBitmap != null
+                        ) {
+                            viewModel.openNavigateUpDialog()
+                        } else {
+                            navController.navigateUp()
+                        }
+                    }
                 )
             },
             modifier = Modifier.padding(top = 8.dp)
@@ -222,16 +223,8 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
 
                             MenuEditTextFiled(
                                 textValue = menuInfo,
-                                onValueChange = {
-                                    val lines = it.split("\n")
-                                    if (lines.size <= 2) {
-                                        viewModel.setMenuInfo(it)
-                                    } else {
-                                        val truncatedText = lines.take(2).joinToString("\n")
-                                        viewModel.setMenuInfo(truncatedText)
-                                    }
-                                },
-                                maxLines = 2,
+                                onValueChange = { viewModel.setMenuInfo(it) },
+                                maxLines = 6,
                                 placeholder = stringResource(R.string.placeholder_menu_info),
                             )
 
@@ -312,6 +305,7 @@ fun MenuEditorScreen(navController: NavController, editTargetMenuUid: Int? = nul
                             } else {
                                 viewModel.insertMenu()
                             }
+//                            navController.navigateUp()
                         } else {
                             Toast.makeText(
                                 context,
@@ -365,7 +359,9 @@ fun MenuEditTextFiled(
     )
 }
 
-private fun setImageBitmap(context: Context, uri: Uri): Bitmap {
+private fun setImageBitmap(context: Context, uri: Uri,imageFileSize:Double): Bitmap {
+    val toastMessage = Toast.makeText(context, context.getString(R.string.toast_message_image_resize), Toast.LENGTH_SHORT)
+
     val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         ImageDecoder.decodeBitmap(
             ImageDecoder.createSource(context.contentResolver, uri)
@@ -373,5 +369,25 @@ private fun setImageBitmap(context: Context, uri: Uri): Bitmap {
     } else {
         MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
     }
-    return Bitmap.createScaledBitmap(bitmap, bitmap.width / 4, bitmap.height / 4, true)
+    return if(imageFileSize > 10.0 && imageFileSize < 20.0) {
+        toastMessage.show()
+        Bitmap.createScaledBitmap(bitmap, bitmap.width/4, bitmap.height/4, true)
+    }else if(imageFileSize >3.0 && imageFileSize < 10.0){
+        toastMessage.show()
+        Bitmap.createScaledBitmap(bitmap, bitmap.width / 2, bitmap.height / 2, true)
+    }else{
+        Bitmap.createScaledBitmap(bitmap, bitmap.width , bitmap.height, true)
+    }
+}
+
+private fun getImageFileSize(context: Context, uri: Uri): Double {
+    val cursor = context.contentResolver.query(uri, null, null, null, null)
+    var size: Long = 0
+    cursor?.use {
+        val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
+        if (it.moveToFirst()) {
+            size = it.getLong(sizeIndex)
+        }
+    }
+    return size / (1024.0 * 1024.0)
 }

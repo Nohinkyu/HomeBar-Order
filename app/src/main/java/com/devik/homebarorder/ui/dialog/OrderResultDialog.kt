@@ -31,11 +31,11 @@ fun OrderResultDialog(
     onDismissRequest: () -> Unit,
     resultMessageTitle: String,
     resultMessageBody: String,
-    orderNumber: Int? = null
+    tableNumber: String? = null
 ) {
 
-    val orderNumberState = if (orderNumber != null) {
-        "${stringResource(R.string.order_number)} $orderNumber"
+    val orderNumberState = if (tableNumber != null) {
+        "${stringResource(R.string.order_number)} $tableNumber"
     } else {
         stringResource(R.string.order_result_dialog_button_close)
     }

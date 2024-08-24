@@ -98,6 +98,10 @@ fun ManualDialog(onDismissRequest: () -> Unit) {
                     head = stringResource(id = R.string.dialog_message_manual_header_7),
                     body = stringResource(id = R.string.dialog_message_manual_body_7)
                 )
+                HeadRowText(
+                    head = stringResource(id = R.string.dialog_message_manual_header_8),
+                    body = stringResource(id = R.string.dialog_message_manual_body_8)
+                )
 
                 Button(
                     onClick = { onDismissRequest() },

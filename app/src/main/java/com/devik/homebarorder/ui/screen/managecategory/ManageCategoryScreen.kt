@@ -36,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -48,8 +47,7 @@ import androidx.navigation.NavController
 import com.devik.homebarorder.R
 import com.devik.homebarorder.data.source.local.database.CategoryEntity
 import com.devik.homebarorder.ui.component.topappbar.BackIconWithTitleAppBar
-import com.devik.homebarorder.ui.dialog.EditCategoryDialog
-import com.devik.homebarorder.ui.dialog.YesButtonDialog
+import com.devik.homebarorder.ui.dialog.EditTextDialog
 import com.devik.homebarorder.ui.dialog.YesOrNoDialog
 import com.devik.homebarorder.ui.theme.LightGray
 
@@ -75,7 +73,7 @@ fun ManageCategoryScreen(navController: NavController) {
             topBar = {
                 BackIconWithTitleAppBar(
                     title = stringResource(R.string.top_appbar_title_category),
-                    navController = navController
+                    onBackIconClick = { navController.navigateUp() }
                 )
             },
             modifier = Modifier.padding(8.dp)
@@ -197,10 +195,12 @@ fun ManageCategoryScreen(navController: NavController) {
         }
 
         if (editCategoryDialogState) {
-            EditCategoryDialog(
+            EditTextDialog(
+                editTextTitle = stringResource(R.string.dialog_message_edit_category_text),
                 editTextState = editTargetCategoryTextState,
+                yesButtonText = stringResource(R.string.dialog_button_save),
                 onDismissRequest = { viewModel.closeEditCategoryDialog() },
-                onCategoryChange = { viewModel.onEditCategoryTextChange(it) },
+                onTextChange = { viewModel.onEditCategoryTextChange(it) },
                 onSaveRequest = {
                     viewModel.updateCategory(
                         CategoryEntity(

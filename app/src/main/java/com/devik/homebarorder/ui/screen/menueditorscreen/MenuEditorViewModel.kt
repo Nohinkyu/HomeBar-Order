@@ -48,11 +48,14 @@ class MenuEditorViewModel @Inject constructor(
     private val _buttonTextState = MutableStateFlow<String>("")
     val buttonTextState: StateFlow<String> = _buttonTextState
 
-    private val _isSavingState = MutableStateFlow<Boolean>(false)
-    val isSavingState:StateFlow<Boolean> = _isSavingState
+    private val _isNavigateDialogState = MutableStateFlow<Boolean>(false)
+    val isNavigateDialogState: StateFlow<Boolean> = _isNavigateDialogState
 
-    private val _isSavingSuccess = MutableStateFlow<Boolean>(false)
-    val isSavingSuccess:StateFlow<Boolean> = _isSavingSuccess
+    private val _isMenuSaveSuccess = MutableStateFlow<Boolean>(false)
+    val isMenuSaveSuccess: StateFlow<Boolean> = _isMenuSaveSuccess
+
+    private val _isInProgressDialogState = MutableStateFlow<Boolean>(false)
+    val isInProgressDialogState: StateFlow<Boolean> = _isInProgressDialogState
 
     private val _editTargetMenuUid = MutableStateFlow<Int>(0)
 
@@ -120,6 +123,7 @@ class MenuEditorViewModel @Inject constructor(
             _menuPrice.value.toLong()
         }
         viewModelScope.launch {
+            _isInProgressDialogState.value = true
             if (_menuName.value.isNotBlank() && _categoryList.value.contains(_menuCategory.value)) {
                 val menu = MenuEntity(
                     menuName = _menuName.value,
@@ -128,10 +132,9 @@ class MenuEditorViewModel @Inject constructor(
                     menuCategory = _menuCategory.value.uid,
                     menuImage = _menuImageBitmap.value
                 )
-                _isSavingState.value = true
                 async { menuRepository.insertMenu(menu) }.await()
-                _isSavingState.value = false
-                _isSavingSuccess. value = true
+                _isInProgressDialogState.value = false
+                _isMenuSaveSuccess.value = true
             } else {
                 _isMenuNameCategoryBlank.value = true
             }
@@ -145,6 +148,7 @@ class MenuEditorViewModel @Inject constructor(
             _menuPrice.value.toLong()
         }
         viewModelScope.launch {
+            _isInProgressDialogState.value = true
             if (_menuName.value.isNotBlank() && _categoryList.value.contains(_menuCategory.value)) {
                 val menu = MenuEntity(
                     uid = _editTargetMenuUid.value,
@@ -154,24 +158,20 @@ class MenuEditorViewModel @Inject constructor(
                     menuCategory = _menuCategory.value.uid,
                     menuImage = _menuImageBitmap.value
                 )
-                _isSavingState.value = true
-                async {menuRepository.updateMenu(menu)}.await()
-                _isSavingState.value = false
-                _isSavingSuccess. value = true
+                async { menuRepository.updateMenu(menu) }.await()
+                _isInProgressDialogState.value = false
+                _isMenuSaveSuccess.value = true
             } else {
                 _isMenuNameCategoryBlank.value = true
             }
         }
     }
 
-    fun closeSuccessDialog() {
-        _isSavingSuccess.value = false
+    fun openNavigateUpDialog() {
+        _isNavigateDialogState.value = true
     }
 
-    fun clearMenuInfo() {
-        _menuName.value = ""
-        _menuInfo.value = ""
-        _menuPrice.value = ""
-        _menuImageBitmap.value = null
+    fun closeNavigateUpDialog() {
+        _isNavigateDialogState.value = false
     }
 }
