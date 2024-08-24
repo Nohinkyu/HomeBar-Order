@@ -31,6 +31,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -163,17 +164,19 @@ fun ManageCategoryScreen(navController: NavController) {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 24.dp, end = 24.dp)
+                        .padding(start = 24.dp, end = 24.dp),
                 ) {
-                    items(categoryList) { item ->
+                    items(
+                        items = categoryList,
+                        key = {category -> category.uid }) { category  ->
                         ItemCategory(
-                            categoryEntity = item,
+                            categoryEntity = category ,
                             onDeleteClick = {
                                 viewModel.showDeleteDialog()
-                                viewModel.setDeleteTargetCategory(item)
+                                viewModel.setDeleteTargetCategory(category )
                             },
                             onEditClick = {
-                                viewModel.setEditTargetCategory(item)
+                                viewModel.setEditTargetCategory(category )
                                 viewModel.showEditCategoryDialog()
                             }
                         )

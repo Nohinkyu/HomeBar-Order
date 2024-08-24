@@ -128,7 +128,9 @@ fun ManageMenuScreen(navController: NavController) {
                                 }
                             })
                         }
-                        items(allCategoryList) { item ->
+                        items(
+                            items = allCategoryList,
+                            key = {item -> item.uid}) { item ->
                             CategoryItem(categoryEntity = item,
                                 isSelected = item == selectedCategory,
                                 onClick = {

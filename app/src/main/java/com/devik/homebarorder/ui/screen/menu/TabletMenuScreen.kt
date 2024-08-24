@@ -180,7 +180,9 @@ fun TabletMenuScreen(navController: NavController) {
                             .background(color = Color.White),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        items(categoryList) { category ->
+                        items(
+                            items = categoryList,
+                            key = { category -> category.uid }) { category ->
                             CategoryItem(
                                 category = category,
                                 isSelected = category == selectedCategory,
@@ -240,7 +242,9 @@ fun TabletMenuScreen(navController: NavController) {
                                 .align(Alignment.TopCenter)
                                 .border(width = 2.dp, color = LightGray, shape = RectangleShape)
                         ) {
-                            items(cartList) { menu ->
+                            items(
+                                items = cartList,
+                                key = { menu -> menu.menuId }) { menu ->
                                 CartItem(
                                     cartMenuItem = menu,
                                     onDeleteClick = { viewModel.deleteCartMenu(menu) },
