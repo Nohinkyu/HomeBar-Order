@@ -55,7 +55,7 @@ fun CartItem(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             fontSize = 16.sp,
-            modifier = Modifier.padding(start = 16.dp).width(144.dp)
+            modifier = Modifier.padding(start = 16.dp).fillMaxWidth().weight(1f)
         )
 
         Row(

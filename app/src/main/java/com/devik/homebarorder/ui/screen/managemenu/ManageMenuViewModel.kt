@@ -46,7 +46,11 @@ class ManageMenuViewModel @Inject constructor(
     fun getAllMenuList() {
         viewModelScope.launch {
             _allMenuList.value = menuRepository.getAllMenu().sortedBy { it.menuPrice }
-            _selectedCategoryMenu.value = _allMenuList.value
+            if (_isAllCategorySelected.value) {
+                _selectedCategoryMenu.value = _allMenuList.value
+            } else {
+                _selectedCategory.value?.let { getSelectedCategoryMenu(it) }
+            }
         }
     }
 

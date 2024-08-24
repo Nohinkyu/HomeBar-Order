@@ -47,7 +47,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Gray
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -57,10 +56,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
 import com.devik.homebarorder.R
 import com.devik.homebarorder.data.source.local.database.CategoryEntity
 import com.devik.homebarorder.data.source.local.database.MenuEntity
+import com.devik.homebarorder.ui.component.image.AsyncImageWithDefaultIcon
 import com.devik.homebarorder.ui.component.navigation.NavigationRoute
 import com.devik.homebarorder.ui.component.topappbar.BackAndSearchIconAppBar
 import com.devik.homebarorder.ui.component.topappbar.SearchAppBar
@@ -313,27 +312,27 @@ private fun MenuItem(
                         .background(color = Color.White)
                         .align(Alignment.CenterStart)
                 ) {
-                    AsyncImage(
-                        model = menuEntity.menuImage,
+                    AsyncImageWithDefaultIcon(
+                        image = menuEntity.menuImage,
                         contentDescription = stringResource(R.string.content_description_menu_image),
                         modifier = Modifier
                             .size(height = 144.dp, width = 115.dp)
                             .padding(start = 8.dp)
-                            .clip(shape = RoundedCornerShape(5.dp)),
-                        contentScale = ContentScale.Crop,
+                            .clip(shape = RoundedCornerShape(5.dp))
                     )
                     Spacer(modifier = Modifier.size(16.dp))
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth(0.6f)
+                            .fillMaxWidth()
                             .height(144.dp)
+                            .weight(1f)
                             .background(color = Color.White)
                     ) {
                         Text(
                             text = menuEntity.menuName, modifier = Modifier
                                 .align(Alignment.TopStart)
-                                .padding(top = 8.dp)
-                                .widthIn(max = 136.dp),
+                                .fillMaxWidth()
+                                .padding(top = 8.dp, end = 48.dp),
                             fontSize = 18.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
